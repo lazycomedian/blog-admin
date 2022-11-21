@@ -4,7 +4,7 @@ on:
   push:
     # 分支随意
     branches:
-      - master
+      - main
 # 一个workflow由执行的一项或多项job
 jobs:
   # 一个job任务，任务名为build
