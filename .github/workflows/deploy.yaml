@@ -9,7 +9,7 @@ on:
 jobs:
   # 一个job任务，任务名为build
   build:
-    #运行在最新版centos系统中
+    #运行在最新版ubuntu系统中
     runs-on: ubuntu-latest
     #步骤合集
     steps:
@@ -29,14 +29,18 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: commit push
-        #执行执行某个shell命令或脚本
-        run: |
-          git config --global user.email aqv04720@163.com
-          git config --global user.name lazyComedian
-          git add -A
-          git commit -m "update" -a
-          git push
+      - name: rsync deployments
+        # 部署
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          # 这里是 rsync 的参数 switches: -avzh --delete --exclude="" --include="" --filter=""
+          switches: -avzh
+          path: dist/
+          remote_path: /www/com/baobiwang/blog/admin
+          remote_host: 121.196.238.114
+          remote_port: 22
+          remote_user: root
+          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
         # 环境变量
         env:
           email: aqv04720@163.com
