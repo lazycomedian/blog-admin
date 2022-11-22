@@ -9,7 +9,7 @@ on:
 jobs:
   # 一个job任务，任务名为build
   build:
-    #运行在最新版ubuntu系统中
+    #运行在最新版ubuntu系统中 
     runs-on: ubuntu-latest
     #步骤合集
     steps:
