@@ -37,6 +37,7 @@ jobs:
           # 这里是 rsync 的参数 switches: -avzh --delete --exclude="" --include="" --filter=""
           switches: -avzh
           path: dist/
+          # 部署路径
           remote_path: /www/com/baobiwang/blog/admin
           remote_host: 121.196.238.114
           remote_port: 22
