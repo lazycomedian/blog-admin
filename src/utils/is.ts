@@ -128,17 +128,10 @@ export function isNull(val: unknown): val is null {
 }
 
 /**
- * 不为null并且不为undefined
- * @param val
- */
-export function isNullAndUnDe(val: unknown): val is null | undefined {
-	return isUndef(val) && isNull(val);
-}
-
-/**
  * 不为null或者不为undefined
  * @param val
  */
-export function isNullOrUnDef(val: unknown): val is null | undefined {
+export function isEmpty(val: unknown): val is (null | undefined) {
 	return isUndef(val) || isNull(val);
 }
+

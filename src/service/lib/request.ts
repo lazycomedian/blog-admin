@@ -5,21 +5,25 @@ import AxiosCanceler from "./canceler";
 import { checkStatus } from "./constant";
 import NProgress from "./nprogress";
 
-interface AxiosServiceRequestConfig<D = any> extends AxiosRequestConfig<D> {
+interface BizRequestConfig<D = any> extends AxiosRequestConfig<D> {
   /**
    * 自动取消重复的请求，可通过设置该属性为false以允许重复请求的发送
    * @default true
    */
   autoCancel?: boolean;
+  /**
+   * 正确返回数据的状态码
+   */
+  code?: number;
 }
 
-export class AxiosServiceRequest {
+export class BizRequest {
   private readonly instance: AxiosInstance;
 
   private readonly autoCancel: boolean;
 
   constructor(
-    config: AxiosServiceRequestConfig = { withCredentials: true },
+    config: BizRequestConfig = { withCredentials: true },
     private readonly canceler: AxiosCanceler = new AxiosCanceler()
   ) {
     this.autoCancel = config.autoCancel ?? true;
@@ -36,7 +40,7 @@ export class AxiosServiceRequest {
      * 客户端发送请求 -> [请求拦截器] -> 服务器
      */
     this.instance.interceptors.request.use(
-      (config: AxiosServiceRequestConfig) => {
+      (config: BizRequestConfig) => {
         NProgress.start();
 
         // 存在未完成的重复请求先取消该重复请求
@@ -100,10 +104,13 @@ export class AxiosServiceRequest {
    * @param method 请求方法
    */
   protected request(method: Method) {
-    return <Data = any>(url: string, data?: any, options?: Omit<AxiosServiceRequestConfig<Data>, "method">) => {
+    return <Data = any>(url: string, data?: any, options: Omit<BizRequestConfig<Data>, "method"> = {}) => {
       if (method.toLowerCase() === "get") data = { params: data };
       else data = { data };
-      return this.instance({ url, ...data, ...options, method });
+
+      const { code = StatusCodeEnum.SUCCESS, ...restOptions } = options;
+
+      return this.instance({ url, ...data, ...restOptions, method });
     };
   }
 

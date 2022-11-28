@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "vite --mode dev",
-    "start:prod": "vite --mode prod",
-    "build": "rm -rf dist-* & vite build --mode prod",
+    "start:prod": "vite --mode production",
+    "build": "rm -rf dist-* & vite build --mode production",
     "prettier": "prettier --write ."
   },
   "keywords": [
