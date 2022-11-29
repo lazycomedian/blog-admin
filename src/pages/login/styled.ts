@@ -1,94 +1,172 @@
-import styled from "@emotion/styled";
+import login_bg_mb from "@/assets/images/login_bg_mb.png";
+import login_bg_pc from "@/assets/images/login_bg_pc.jpg";
+import styled, { css } from "styled-components";
 
-import login_bg from "@/assets/svgs/login_bg.svg";
+/* 一般大于手机的尺寸CSS */
+const lgMedia = css`
+  @media (min-width: 767px) {
+    .content {
+      width: 85vw;
+      height: 90vh;
+      /* background: url(${login_bg_pc}) no-repeat; */
+      background-size: 90% 100%;
+      position: absolute;
+      right: 15%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 20px;
+      background-color: #fff;
+      .login-wrapper {
+        width: 25vw;
+        position: absolute;
+        right: 15%;
+        top: 50%;
+        transform: translateY(-50%);
+        h1 {
+          text-align: center;
+          font-size: 45px;
+          color: rgb(81, 100, 115);
+          margin-bottom: 40px;
+        }
+        .login-form {
+          margin: 10px 0;
+          .form-item {
+            span {
+              color: rgb(81, 100, 115);
+            }
+            .input-item {
+              height: 60px;
+              border: 1px solid rgb(214, 222, 228);
+            }
+          }
+          .login-btn {
+            height: 50px;
+            font-size: 20px;
+          }
+        }
 
-export const Wrapper = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 550px;
-  height: 100%;
-  min-height: 500px;
-  background-image: url(${login_bg});
-  background-position: 50%;
-  background-size: 100% 100%;
-  background-size: cover;
-
-  .dark {
-    position: absolute;
-    top: 5%;
-    right: 3.2%;
-  }
-
-  .login-box {
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 96%;
-    height: 94%;
-    padding: 0 4% 0 20px;
-    overflow: hidden;
-    border-radius: 10px;
-    .login-left {
-      width: 750px;
-      img {
-        width: 100%;
-        height: 100%;
+        .i-icon-button {
+          width: 55px;
+          height: 55px;
+          font-size: 30px;
+          border-radius: 20%;
+        }
       }
     }
-    .login-form {
-      padding: 40px 45px 25px;
-      border-radius: 10px;
-      .login-logo {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 40px;
-        padding: 10px 0;
-        .login-icon {
-          width: 70px;
+  }
+`;
+
+/* 手机端CSS */
+const smMedia = css`
+  @media (max-width: 768px) {
+    .content {
+      width: 100vw;
+      height: 100vh;
+      /* background: url(${login_bg_mb}) no-repeat; */
+      background-size: 100% 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      .login-wrapper {
+        width: 70%;
+        height: 60%;
+        padding-top: 15%;
+        h1 {
+          font-size: 30px;
+          color: #fff;
         }
-        .logo-text {
-          padding-left: 25px;
-          font-size: 48px;
-          font-weight: bold;
-          white-space: nowrap;
-        }
-      }
-      .ant-form-item {
-        height: 75px;
-        margin-bottom: 0;
-        .ant-input-prefix {
-          margin-right: 10px;
-        }
-        .ant-input-affix-wrapper-lg {
-          padding: 8.3px 11px;
-        }
-        .ant-input-affix-wrapper,
-        .ant-input-lg {
-          font-size: 14px;
-        }
-        .ant-input-affix-wrapper {
-          color: #bfbfbf;
-        }
-      }
-      .login-btn {
-        width: 100%;
-        margin-top: 10px;
-        white-space: nowrap;
-        .ant-form-item-control-input-content {
-          display: flex;
-          justify-content: space-between;
-          .ant-btn {
-            width: 180px;
+        .login-form {
+          .form-item {
+            margin: 10px 0;
             span {
-              font-size: 14px;
+              color: rgb(113, 129, 141);
+            }
+            .input-item {
+              height: 30px;
+              border: 1px solid rgb(113, 129, 141);
+              background-color: transparent;
+              color: #fff;
+            }
+          }
+          .login-btn {
+            height: 40px;
+            background-color: rgb(235, 95, 93);
+            font-size: 16px;
+          }
+        }
+
+        .i-icon-button {
+          width: 50px;
+          height: 50px;
+          border-radius: 20%;
+          font-size: 25px;
+          background: transparent;
+          color: #fff;
+        }
+      }
+    }
+  }
+`;
+
+export const LoginWrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(29, 67, 89);
+
+  .content {
+    .login-wrapper {
+      h1 {
+        text-align: center;
+      }
+      .login-form {
+        .form-item {
+          margin: 20px 0;
+          span {
+            font-size: 14px;
+            font-weight: 500;
+            display: block;
+            margin: 5px 20px;
+            font-weight: 500;
+          }
+          .input-item {
+            width: 100%;
+            border-radius: 40px;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 20px;
+            font-weight: 200;
+            &:focus {
+              outline: none;
             }
           }
         }
+        .login-btn {
+          width: 100%;
+          border-radius: 40px;
+          color: #fff;
+          border: 0;
+          font-weight: 100;
+          margin-top: 10px;
+        }
+      }
+
+      .i-divider {
+        border-color: rgb(214, 222, 228);
+        color: rgb(81, 100, 115);
+        font-weight: 400;
+      }
+
+      .other-login-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
+
+  ${lgMedia}
+
+  ${smMedia}
 `;

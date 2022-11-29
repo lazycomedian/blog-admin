@@ -1,8 +1,8 @@
-import { StatusCodeEnum } from "@/enums/http";
-import { message } from "antd";
+import { codeMessage } from "@/constants/exception";
+import { StatusCodeEnum } from "@/constants/http.enum";
+import { message, notification } from "antd";
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, Method } from "axios";
 import AxiosCanceler from "./canceler";
-import { checkStatus } from "./constant";
 import NProgress from "./nprogress";
 
 interface BizRequestConfig<D = any> extends AxiosRequestConfig<D> {
@@ -22,17 +22,14 @@ export class BizRequest {
 
   private readonly autoCancel: boolean;
 
-  constructor(
-    config: BizRequestConfig = { withCredentials: true },
-    private readonly canceler: AxiosCanceler = new AxiosCanceler()
-  ) {
+  constructor(config: BizRequestConfig, private readonly canceler = new AxiosCanceler()) {
     this.autoCancel = config.autoCancel ?? true;
     this.instance = axios.create(config);
     this.createInterceptors();
   }
 
   /**
-   * 创建拦截器
+   * 创建拦截器中间间
    */
   private createInterceptors(): void {
     /**
@@ -89,7 +86,7 @@ export class BizRequest {
         if (error.message.includes("timeout")) message.error("请求超时，请稍后再试");
 
         // 根据响应的错误状态码，做不同的处理
-        if (response) checkStatus(response.status);
+        if (response) this.checkStatus(response.status, response.statusText);
 
         // 服务器结果都没有返回(可能服务器错误可能客户端断网) 断网处理:可以跳转到断网页面
         if (!window.navigator.onLine) window.location.hash = "/500";
@@ -112,6 +109,17 @@ export class BizRequest {
 
       return this.instance({ url, ...data, ...restOptions, method });
     };
+  }
+
+  /**
+   * 校验网络请求状态码
+   * @param status
+   * @param msg
+   */
+  private checkStatus(status: number | undefined | null, msg?: string) {
+    if (!status) return;
+    notification.destroy();
+    notification.error({ message: status, description: codeMessage[status] || msg });
   }
 
   public get cancelAll() {

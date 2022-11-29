@@ -1,13 +1,7 @@
 import { bizRequest } from "..";
 
 export class LoginService {
-  static login() {
-    const data = new URLSearchParams();
-    data.append("username", "123");
-    data.append("password", "asd");
-
-    return bizRequest.post("/login", {
-      data: data
-    });
+  static login(data: { userName: string; password: string }) {
+    return bizRequest.post("/api/user/login", data);
   }
 }
