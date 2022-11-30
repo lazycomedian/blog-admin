@@ -1,13 +1,16 @@
-import { LoginService } from "@/service/api/login";
+import { LoginController } from "@/service/api/login";
 import { QqOutlined, WechatOutlined } from "@ant-design/icons";
 import { useRequest } from "ahooks";
-import { Button, Divider } from "antd";
+import { Button, Divider, message } from "antd";
 import React from "react";
 import { LoginWrapper } from "./styled";
 
 const Login: React.FC = props => {
-  const { data, run: login } = useRequest(LoginService.login, { manual: true });
-  console.log(data);
+  const { data, run: login } = useRequest(LoginController.login, {
+    manual: true,
+    onError: e => message.error(e.message),
+    onSuccess: data => message.success("登录成功")
+  });
 
   if (1) return <button onClick={() => login({ userName: "a", password: "1" })}>1</button>;
 

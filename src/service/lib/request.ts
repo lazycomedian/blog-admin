@@ -59,24 +59,18 @@ export class BizRequest {
     this.instance.interceptors.response.use(
       response => {
         NProgress.done();
-        const { data, config } = response;
+        const { data = {}, config } = response;
 
         // 在请求结束后，移除本次请求
         this.canceler.remove(config);
 
         // 登录失效（code == 40001）
-        if (data.code === StatusCodeEnum.NO_LOGIN) {
-          message.error(data.msg);
+        if ("code" in data && data.code === StatusCodeEnum.NO_LOGIN) {
           window.location.hash = "/login";
-          return Promise.reject(data);
+          return Promise.reject(data.message || "未知错误");
         }
 
-        // 全局错误信息拦截（防止下载文件得时候返回数据流，没有code，直接报错）
-        if (data.code && data.code !== StatusCodeEnum.SUCCESS) {
-          return Promise.reject(data);
-        }
-
-        return data;
+        return response;
       },
       (error: AxiosError) => {
         const { response } = error;
@@ -86,7 +80,7 @@ export class BizRequest {
         if (error.message.includes("timeout")) message.error("请求超时，请稍后再试");
 
         // 根据响应的错误状态码，做不同的处理
-        if (response) this.checkStatus(response.status, response.statusText);
+        if (response) BizRequest.checkStatus(response.status, response.statusText);
 
         // 服务器结果都没有返回(可能服务器错误可能客户端断网) 断网处理:可以跳转到断网页面
         if (!window.navigator.onLine) window.location.hash = "/500";
@@ -101,13 +95,17 @@ export class BizRequest {
    * @param method 请求方法
    */
   protected request(method: Method) {
-    return <Data = any>(url: string, data?: any, options: Omit<BizRequestConfig<Data>, "method"> = {}) => {
+    return async <Data = any>(url: string, data?: any, options: Omit<BizRequestConfig<Data>, "method"> = {}) => {
       if (method.toLowerCase() === "get") data = { params: data };
       else data = { data };
 
       const { code = StatusCodeEnum.SUCCESS, ...restOptions } = options;
 
-      return this.instance({ url, ...data, ...restOptions, method });
+      const res = await this.instance({ url, ...data, ...restOptions, method });
+      const response: IResponse = res.data;
+      // 全局错误信息拦截（防止下载文件得时候返回数据流，没有code，直接报错）
+      if (response.code !== code) throw new Error(response.message);
+      return response.data as Data;
     };
   }
 
@@ -116,9 +114,9 @@ export class BizRequest {
    * @param status
    * @param msg
    */
-  private checkStatus(status: number | undefined | null, msg?: string) {
+  private static checkStatus(status: number | undefined | null, msg?: string) {
     if (!status) return;
-    notification.destroy();
+    message.destroy();
     notification.error({ message: status, description: codeMessage[status] || msg });
   }
 
