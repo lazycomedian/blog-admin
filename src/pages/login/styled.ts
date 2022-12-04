@@ -6,38 +6,44 @@ import styled, { css } from "styled-components";
 const lgMedia = css`
   @media (min-width: 767px) {
     .content {
-      width: 85vw;
+      width: 90vw;
       height: 90vh;
-      /* background: url(${login_bg_pc}) no-repeat; */
-      background-size: 90% 100%;
-      position: absolute;
-      right: 15%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      background: url(${login_bg_pc}) no-repeat;
+      background-size: 85% 100%;
+      /* background-size: 1200px 785px; */
       border-radius: 20px;
       background-color: #fff;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .i-divider {
+        color: rgb(81, 100, 115);
+      }
+
       .login-wrapper {
-        width: 25vw;
-        position: absolute;
-        right: 15%;
-        top: 50%;
-        transform: translateY(-50%);
+        width: 430px;
+        margin-right: 11%;
+
         h1 {
           text-align: center;
           font-size: 45px;
           color: rgb(81, 100, 115);
           margin-bottom: 40px;
         }
+
+        .label {
+          color: rgb(81, 100, 115);
+        }
+
         .login-form {
           margin: 10px 0;
           .form-item {
-            span {
-              color: rgb(81, 100, 115);
-            }
-            .input-item {
-              height: 60px;
+            .input-item,
+            .i-input {
+              height: 55px;
               border: 1px solid rgb(214, 222, 228);
+              background-color: #fff;
             }
           }
           .login-btn {
@@ -63,30 +69,47 @@ const smMedia = css`
     .content {
       width: 100vw;
       height: 100vh;
-      /* background: url(${login_bg_mb}) no-repeat; */
+      background: url(${login_bg_mb}) no-repeat;
       background-size: 100% 100%;
       display: flex;
       align-items: flex-start;
       justify-content: center;
+
+      .i-divider {
+        color: #fff;
+      }
+
       .login-wrapper {
         width: 70%;
         height: 60%;
         padding-top: 15%;
+
         h1 {
           font-size: 30px;
           color: #fff;
         }
+
+        .label {
+          color: rgb(113, 129, 141);
+        }
+
         .login-form {
           .form-item {
             margin: 10px 0;
-            span {
-              color: rgb(113, 129, 141);
-            }
-            .input-item {
-              height: 30px;
+
+            .input-item,
+            .i-input {
+              height: 45px;
               border: 1px solid rgb(113, 129, 141);
               background-color: transparent;
               color: #fff;
+              &,
+              input {
+                color: #fff;
+              }
+              .ant-input-password-icon {
+                color: rgb(113, 129, 141);
+              }
             }
           }
           .login-btn {
@@ -113,29 +136,45 @@ export const LoginWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgb(29, 67, 89);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   .content {
+    overflow: hidden;
     .login-wrapper {
       h1 {
         text-align: center;
+        cursor: pointer;
       }
       .login-form {
+        .label {
+          font-size: 14px;
+          font-weight: 500;
+          display: block;
+          margin: 5px 20px;
+          font-weight: 500;
+        }
+
+        .ant-form-item-label {
+          padding: 0;
+        }
+
         .form-item {
-          margin: 20px 0;
-          span {
-            font-size: 14px;
-            font-weight: 500;
-            display: block;
-            margin: 5px 20px;
-            font-weight: 500;
-          }
-          .input-item {
+          margin: 15px 0;
+
+          .input-item,
+          .i-input {
             width: 100%;
             border-radius: 40px;
-            padding: 20px;
+            /* padding: 20px; */
+            padding: 0 20px;
             box-sizing: border-box;
+            background-color: transparent;
             font-size: 20px;
-            font-weight: 200;
+            input {
+              background-color: transparent;
+            }
             &:focus {
               outline: none;
             }
@@ -146,15 +185,14 @@ export const LoginWrapper = styled.div`
           border-radius: 40px;
           color: #fff;
           border: 0;
-          font-weight: 100;
-          margin-top: 10px;
+          /* font-weight: 300; */
+          margin-top: 15px;
         }
       }
 
       .i-divider {
-        border-color: rgb(214, 222, 228);
-        color: rgb(81, 100, 115);
         font-weight: 400;
+        border-color: rgb(214, 222, 228);
       }
 
       .other-login-wrapper {

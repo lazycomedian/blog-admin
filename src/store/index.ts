@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import { ThemeStore } from "./theme";
 import { UserStore } from "./user";
 
@@ -12,7 +12,7 @@ const store = {
 
 const storeContext = React.createContext(store);
 
-export const StoreProvider: React.FC<PropsWithChildren> = ({ children }) => {
+export const StoreProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   return React.createElement(storeContext.Provider, { value: store }, children);
 };
 

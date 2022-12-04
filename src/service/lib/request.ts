@@ -1,6 +1,6 @@
 import { codeMessage } from "@/constants/exception";
-import { StatusCodeEnum } from "@/constants/http.enum";
-import { message, notification } from "antd";
+import { StatusCodeEnum } from "@/constants/http";
+import { notification } from "antd";
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, Method } from "axios";
 import AxiosCanceler from "./canceler";
 import NProgress from "./nprogress";
@@ -77,10 +77,16 @@ export class BizRequest {
         NProgress.done();
 
         // 请求超时单独判断，请求超时没有 response
-        if (error.message.includes("timeout")) message.error("请求超时，请稍后再试");
+        if (error.message.includes("timeout")) {
+          notification.error({ message: "请求超时", description: "网络延迟较大，请稍后再试" });
+          return Promise.reject(null);
+        }
 
         // 根据响应的错误状态码，做不同的处理
-        if (response) BizRequest.checkStatus(response.status, response.statusText);
+        if (response) {
+          BizRequest.checkStatus(response.status, response.statusText);
+          return Promise.reject(null);
+        }
 
         // 服务器结果都没有返回(可能服务器错误可能客户端断网) 断网处理:可以跳转到断网页面
         if (!window.navigator.onLine) window.location.hash = "/500";
@@ -116,7 +122,6 @@ export class BizRequest {
    */
   private static checkStatus(status: number | undefined | null, msg?: string) {
     if (!status) return;
-    message.destroy();
     notification.error({ message: status, description: codeMessage[status] || msg });
   }
 

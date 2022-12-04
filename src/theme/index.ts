@@ -3,6 +3,11 @@ import { overrideToken } from "./AntdConfigProvider";
 import { overrideAntdCss } from "./override-antd";
 
 export const GlobalStyle = createGlobalStyle`
+  #root {
+    height: 100%;
+    width: 100%;
+  }
+
   .i-icon-button {
     border: 1px solid rgb(214, 222, 228);
     background-color: #fff;
@@ -10,6 +15,6 @@ export const GlobalStyle = createGlobalStyle`
     margin: 10px;
     color: ${overrideToken.Button?.colorPrimary || "unset"};
   }
-
+ 
   ${overrideAntdCss}
 `;

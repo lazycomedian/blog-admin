@@ -8,7 +8,7 @@ import "virtual:svg-icons-register";
 import "antd/dist/reset.css";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import BasicRouter from "./router";
 import { GlobalStyle } from "./theme";
 import AntdConfigProvider from "./theme/AntdConfigProvider";
@@ -17,13 +17,15 @@ dayjs.locale("zh-cn");
 
 const container = document.getElementById("root")!;
 
+const RouterMode = __ISDEV__ ? BrowserRouter : HashRouter;
+
 ReactDOM.createRoot(container).render(
   <StoreProvider>
     <AntdConfigProvider>
       {/* 路由 */}
-      <HashRouter>
+      <RouterMode>
         <BasicRouter />
-      </HashRouter>
+      </RouterMode>
 
       {/* 全局样式 */}
       <GlobalStyle />
