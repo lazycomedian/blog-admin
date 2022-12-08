@@ -1,20 +1,25 @@
 import FormModal from "@/components/FormModal";
-import { CommonStatusEnum, getModalTypeLabel, ModalTypeEnum, statusOptions } from "@/constants";
+import { CommonStatusEnum, getModalTypeLabel, ModalTypeEnum } from "@/constants";
 import { useTable } from "@/hooks";
 import { useModalRef } from "@/hooks/modal";
-import { RoleModel } from "@/model/role";
-import { RoleService } from "@/service/api";
+import { SysRoleModel } from "@/model/sysRole";
+import { SysRoleService } from "@/service/api";
 import { tips } from "@/utils";
+import { StatusFormItem, StatusQueryFormItem } from "@/utils/common";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMemoizedFn, useResetState } from "ahooks";
-import { Button, Form, Input, Radio, Select, Space, Table } from "antd";
+import { Button, Form, Input, Space, Table } from "antd";
 import React, { useState } from "react";
 import { useColumns } from "./lib";
 
-const RoleManagement: React.FC = () => {
+/**
+ * 角色管理模块
+ *
+ */
+const SystemRole: React.FC = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const [currentRecord, setCurrentRecord, resetCurrentRecord] = useResetState<Partial<RoleModel>>({
+  const [currentRecord, setCurrentRecord, resetCurrentRecord] = useResetState<Partial<SysRoleModel>>({
     status: CommonStatusEnum.AVAILABLE
   });
 
@@ -31,9 +36,10 @@ const RoleManagement: React.FC = () => {
   /**
    * 获取列表数据
    */
-  const { run: getList, tableProps } = useTable(RoleService.queryList, {
+  const { run: getList, tableProps } = useTable(SysRoleService.queryList, {
     defaultPageSize: 15,
-    defaultCurrent: 1
+    defaultCurrent: 1,
+    loadingDelay: 200
   });
 
   /**
@@ -42,18 +48,18 @@ const RoleManagement: React.FC = () => {
    * @param record
    * @param modalType
    */
-  const submit = useMemoizedFn(async (result: RoleModel, modalType?: ModalTypeEnum) => {
+  const submit = useMemoizedFn(async (result: SysRoleModel, modalType?: ModalTypeEnum) => {
     setSubmitLoading(true);
     const prefixTips = modalType ? getModalTypeLabel(modalType) : "操作";
 
     try {
-      if (modalType === ModalTypeEnum.EDIT && currentRecord.id) await RoleService.modify(currentRecord.id, result);
-      else await RoleService.create(result);
+      if (modalType === ModalTypeEnum.EDIT && currentRecord.id) await SysRoleService.modify(currentRecord.id, result);
+      else await SysRoleService.create(result);
       tips.success(prefixTips + "成功");
       getList();
       formModalRef.current?.close();
-    } catch (error) {
-      tips.error(prefixTips + "失败");
+    } catch (error: any) {
+      tips.error(error?.message);
     } finally {
       setSubmitLoading(false);
     }
@@ -64,15 +70,7 @@ const RoleManagement: React.FC = () => {
       {/* 查询 */}
       <Form layout="inline">
         <Space size="large">
-          <Form.Item label="状态" name="status">
-            <Select
-              options={statusOptions}
-              placeholder="请选择"
-              allowClear
-              style={{ width: 214 }}
-              onChange={status => getList({ status })}
-            />
-          </Form.Item>
+          <StatusQueryFormItem onChange={status => getList({ status })} />
           <Form.Item label="角色名称" name="roleName">
             <Input.Search enterButton allowClear placeholder="请输入角色名称" onSearch={roleName => getList({ roleName })} />
           </Form.Item>
@@ -94,7 +92,7 @@ const RoleManagement: React.FC = () => {
       <Table rowKey="id" columns={columns} {...tableProps} scroll={{ x: true }} />
 
       {/* 弹窗 */}
-      <FormModal<RoleModel>
+      <FormModal<SysRoleModel>
         ref={formModalRef}
         title="角色"
         loading={submitLoading}
@@ -104,15 +102,10 @@ const RoleManagement: React.FC = () => {
         <Form.Item label="角色名称" name="roleName" rules={[{ required: true, message: "请输入角色名称" }]}>
           <Input placeholder="请输入角色名称" />
         </Form.Item>
-        <Form.Item label="是否显示" name="status">
-          <Radio.Group>
-            <Radio value={CommonStatusEnum.AVAILABLE}>开启</Radio>
-            <Radio value={CommonStatusEnum.DISABLED}>关闭</Radio>
-          </Radio.Group>
-        </Form.Item>
+        <StatusFormItem />
       </FormModal>
     </Space>
   );
 };
 
-export default RoleManagement;
+export default SystemRole;

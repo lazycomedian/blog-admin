@@ -1,12 +1,12 @@
 import { useTableColumns } from "@/hooks";
-import { RoleModel } from "@/model/role";
-import { RoleService } from "@/service/api";
-import { UseColumns } from "@/typings/columns";
+import { SysRoleModel } from "@/model/sysRole";
+import { SysRoleService } from "@/service/api";
+import { UseColumns } from "@/typings/common";
 import { tips } from "@/utils";
-import { getOperationRender, getStatusRender, timeRender } from "@/utils/columns";
+import { getOperationRender, getStatusRender, timeRender } from "@/utils/common";
 import { useMemoizedFn } from "ahooks";
 
-export const useColumns: UseColumns<RoleModel> = ({ reload, onEdit }) => {
+export const useColumns: UseColumns<SysRoleModel> = ({ reload, onEdit }) => {
   /**
    * 删除角色
    *
@@ -14,7 +14,7 @@ export const useColumns: UseColumns<RoleModel> = ({ reload, onEdit }) => {
    */
   const remove = useMemoizedFn(async (id: number) => {
     try {
-      await RoleService.remove(id);
+      await SysRoleService.remove(id);
       tips.success("删除成功");
       reload();
     } catch (error) {
@@ -22,10 +22,10 @@ export const useColumns: UseColumns<RoleModel> = ({ reload, onEdit }) => {
     }
   });
 
-  return useTableColumns<RoleModel>([
+  return useTableColumns<SysRoleModel>([
     { title: "ID", key: "id" },
     { title: "角色名", key: "roleName" },
-    { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: RoleService.switch }) },
+    { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysRoleService.switch }) },
     { title: "权限", key: "permission" },
     { title: "创建时间", key: "createTime", render: timeRender },
     {

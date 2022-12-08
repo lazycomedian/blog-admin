@@ -113,4 +113,27 @@ export const overrideAntdCss = css`
   } */
 
   /* modal style ----> */
+
+  .ant-pagination {
+    .ant-pagination-item {
+      border: 1px solid #dcdee2;
+      background-color: #fff;
+      transition: border 0.2s ease-in-out, color 0.2s ease-in-out;
+    }
+
+    .ant-pagination-item-active {
+      border-color: #2d8cf0;
+    }
+
+    .ant-pagination-item:hover {
+      background-color: unset !important;
+    }
+
+    .ant-pagination-item:not(.disabled):hover {
+      border-color: #2d8cf0;
+      * {
+        color: #2d8cf0;
+      }
+    }
+  }
 `;

@@ -10,9 +10,6 @@ export const overrideToken: OverrideToken = {
     // colorPrimary: " rgba(59, 72, 89,1)",
     // colorPrimaryHover: "rgba(59, 72, 89,.9)",
     // colorPrimaryActive: "rgba(70, 72, 89,1)"
-  },
-  Menu: {
-    // colorPrimary: "#101117"
   }
 };
 const token: Partial<AliasToken> = {

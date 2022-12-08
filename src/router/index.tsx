@@ -2,13 +2,15 @@ import { StorageKeyEnum } from "@/constants/storage";
 import BasicLayout from "@/layouts";
 import Home from "@/pages/home";
 import Login from "@/pages/login";
-import RoleManagement from "@/pages/settings/RoleManagement";
-import UserManagement from "@/pages/settings/UserManagement";
+import SystemAdmin from "@/pages/settings/SystemAdmin";
+import SystemRole from "@/pages/settings/SystemRole";
 import { storage } from "@/utils";
 import { Navigate, RouteObject, useRoutes } from "react-router-dom";
 
 const files = import.meta.glob("@/pages/**/index.tsx", { eager: true });
-console.log(files);
+for (const key in files) {
+  console.log(key);
+}
 
 const RouteGuard = () => {
   const token = storage.getItem(StorageKeyEnum.token);
@@ -38,12 +40,12 @@ const routeConfig: RouteObject[] = [
         path: "/settings",
         children: [
           {
-            path: "/settings/role-management",
-            element: <RoleManagement />
+            path: "/settings/system_role",
+            element: <SystemRole />
           },
           {
-            path: "/settings/user-management",
-            element: <UserManagement />
+            path: "/settings/system_admin",
+            element: <SystemAdmin />
           }
         ]
       }

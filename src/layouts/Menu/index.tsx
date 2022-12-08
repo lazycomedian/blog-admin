@@ -30,12 +30,12 @@ const Menu: React.FC<MenuProps> = props => {
           label: "设置",
           children: [
             {
-              key: "/settings/role-management",
+              key: "/settings/system_role",
               label: "角色管理"
             },
             {
-              key: "/settings/user-management",
-              label: "用户管理"
+              key: "/settings/system_admin",
+              label: "管理员列表"
             }
           ]
         }

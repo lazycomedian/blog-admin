@@ -1,6 +1,6 @@
 import { CommonStatusEnum } from "@/constants";
 
-export interface RoleModel {
+export interface SysRoleModel {
   id: number;
   roleName: string;
   // roleLabel: string;
@@ -8,7 +8,7 @@ export interface RoleModel {
   createTime: string;
 }
 
-export interface RoleQueryModel extends Partial<IPage> {
+export interface SysRoleQueryModel extends Partial<IPage> {
   roleName?: string;
   status?: string;
 }

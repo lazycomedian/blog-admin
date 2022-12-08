@@ -20,6 +20,9 @@ export const GlobalStyle = createGlobalStyle`
     color: ${overrideToken.Button?.colorPrimary || "unset"};
   }
 
+  .ant-form-item .i-query-select{
+    width: 214px !important;
+  }
 
   ${overrideAntdCss}
 `;

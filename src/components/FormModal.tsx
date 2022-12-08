@@ -1,6 +1,6 @@
 import { getModalTypeLabel, ModalTypeEnum } from "@/constants";
 import { useModalProps, withModal } from "@/hooks/modal";
-import { Button, Form, FormItemProps } from "antd";
+import { Button, Form, FormItemProps, ModalProps } from "antd";
 import React, { useEffect } from "react";
 
 /**
@@ -30,16 +30,19 @@ interface FormModalProps<Values> extends React.PropsWithoutRef<any>, React.Props
 
   /** 表单配置 */
   options?: FormItemProps<Values>[];
+
+  width?: ModalProps["width"];
 }
 
 type FormModalFC = <Values extends any = any>(props: FormModalProps<Values>) => React.ReactElement;
 
 const FormModal: FormModalFC = props => {
-  const { options = [], initialValues, title = "", onSubmit, children, loading } = props;
+  const { options = [], initialValues, title = "", onSubmit, children, loading, width } = props;
 
   const [form] = Form.useForm();
 
   const { modalType } = useModalProps(() => ({
+    width,
     title: `${getModalTypeLabel(modalType || ModalTypeEnum.ADD)}${title}`
   }));
 
