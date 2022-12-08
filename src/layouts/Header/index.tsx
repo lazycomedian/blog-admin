@@ -12,7 +12,7 @@ const Header: React.FC<HeaderProps> = ({ collapsed, onTriggerClick }) => {
   return (
     <Wrapper>
       <Layout.Header className="i-header">
-        <Row align="middle" gutter={20}>
+        <Row align="middle" wrap={false} gutter={20}>
           <Col>
             {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
               className: "trigger",
@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ collapsed, onTriggerClick }) => {
           </Col>
 
           <Col style={{ marginBottom: 3 }}>
-            <Breadcrumb>
+            <Breadcrumb className="i-breadcrumb">
               <Breadcrumb.Item>Home</Breadcrumb.Item>
               <Breadcrumb.Item>
                 <a href="">Application Center</a>
@@ -44,6 +44,14 @@ const Wrapper = styled.div`
   .i-header {
     background-color: #fff;
     padding: 0 16px;
+    overflow: hidden;
+
+    .i-breadcrumb {
+      white-space: nowrap;
+      ol {
+        flex-wrap: nowrap;
+      }
+    }
   }
 
   .trigger {

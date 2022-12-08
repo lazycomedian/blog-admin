@@ -1,6 +1,7 @@
 import { StorageKeyEnum } from "@/constants/storage";
 import { BizStorage } from "./storage";
 
+export { default as dayjs } from "dayjs";
 export * from "./tips";
 
 /**
@@ -14,5 +15,5 @@ export * from "./tips";
  */
 export const storage = new BizStorage<StorageKeyEnum>({
   prefix: `@BLOG_${import.meta.env.MODE.toUpperCase()}/`,
-  type: "sessionStorage"
+  type: "localStorage"
 });

@@ -1,15 +1,18 @@
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
+import { SettingOutlined, UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import { Menu as AntdMenu } from "antd";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = props => {
+  const navigate = useNavigate();
   return (
     <AntdMenu
       theme="dark"
       mode="inline"
       defaultSelectedKeys={["1"]}
+      onSelect={r => navigate(r.key)}
       items={[
         {
           key: "1",
@@ -23,12 +26,16 @@ const Menu: React.FC<MenuProps> = props => {
         },
         {
           key: "3",
-          icon: <UploadOutlined />,
+          icon: <SettingOutlined />,
           label: "设置",
           children: [
             {
-              key: "3-1",
+              key: "/settings/role-management",
               label: "角色管理"
+            },
+            {
+              key: "/settings/user-management",
+              label: "用户管理"
             }
           ]
         }

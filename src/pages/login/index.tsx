@@ -1,5 +1,5 @@
 import { StorageKeyEnum } from "@/constants/storage";
-import { LoginController } from "@/service/api/login";
+import { LoginService } from "@/service/api";
 import { storage } from "@/utils";
 import { tips } from "@/utils/tips";
 import { QqOutlined, WechatOutlined } from "@ant-design/icons";
@@ -12,7 +12,7 @@ import { LoginWrapper } from "./styled";
 const Login: React.FC = props => {
   const navigate = useNavigate();
 
-  const { loading, run: login } = useRequest(LoginController.login, {
+  const { loading, run: login } = useRequest(LoginService.login, {
     manual: true,
     debounceWait: 300,
     onError: e => tips.error(e.message),

@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { Card, Layout } from "antd";
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
@@ -20,7 +20,9 @@ const BasicLayout: React.FC = props => {
 
           <Layout.Content className="content">
             {/* 路由占位 */}
-            <Outlet />
+            <Card className="content-card">
+              <Outlet />
+            </Card>
           </Layout.Content>
         </Layout>
       </Layout>
@@ -35,9 +37,18 @@ const Wrapper = styled.div`
   width: 100vw;
   overflow: hidden;
 
+  .ant-menu-submenu-title:active {
+    background: transparent !important;
+  }
+
   .content {
-    margin: 24px 16px;
-    /* padding: 24px; */
+    padding: 24px 16px;
+    overflow-y: auto;
+    background: #f5f7f9;
+
+    .content-card {
+      min-height: 100%;
+    }
   }
 
   .i-layout {

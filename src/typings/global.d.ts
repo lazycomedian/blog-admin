@@ -19,15 +19,38 @@ declare const __ISDEV__: boolean;
 declare const __ISPROD__: boolean;
 
 declare interface IResponse<Data = any> {
-  /** 响应数据 */
+  /**
+   * 响应数据
+   */
   data: Data;
-  /** 状态码 */
+  /**
+   * 状态码
+   */
   readonly code: number;
-  /** 提示信息 */
+  /**
+   *  提示信息
+   */
   readonly message: string;
 }
 
 declare interface IPage {
-  pageSize?: number | string;
-  pageNum?: number | string;
+  /**
+   * 当前页码
+   */
+  current: number;
+  /**
+   * 每页条数
+   */
+  pageSize: number;
+}
+
+declare interface PageResult<T> extends IPage {
+  /**
+   * 条目总数
+   */
+  total: number;
+  /**
+   * 列表响应数据
+   */
+  list: Array<T>;
 }

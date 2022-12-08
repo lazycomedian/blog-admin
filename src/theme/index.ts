@@ -8,6 +8,10 @@ export const GlobalStyle = createGlobalStyle`
     width: 100%;
   }
 
+  #nprogress .bar{
+    background-color: #2b85e4;
+  }
+
   .i-icon-button {
     border: 1px solid rgb(214, 222, 228);
     background-color: #fff;
@@ -15,6 +19,7 @@ export const GlobalStyle = createGlobalStyle`
     margin: 10px;
     color: ${overrideToken.Button?.colorPrimary || "unset"};
   }
- 
+
+
   ${overrideAntdCss}
 `;

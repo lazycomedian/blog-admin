@@ -1,6 +1,6 @@
 import { bizRequest } from "..";
 
-export class LoginController {
+export class LoginService {
   static login(data: { username: string; password: string }) {
     return bizRequest.post<{ token: string }>("/login", data);
   }
