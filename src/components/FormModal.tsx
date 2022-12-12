@@ -1,17 +1,18 @@
 import { getModalTypeLabel, ModalTypeEnum } from "@/constants";
 import { useModalProps, withModal } from "@/hooks/modal";
-import { Button, Form, FormItemProps, ModalProps } from "antd";
+import { PropsWithModalRef } from "@/typings/common";
+import { Button, Form, FormItemProps } from "antd";
 import React, { useEffect } from "react";
 
 /**
  * 表单提交弹窗组件，统一添加/编辑弹窗风格
  *
  * @example ModalTypeEnum
- * 通过modalRef.current?.show(ModalTypeEnum.EDIT)的形式打开编辑类型的窗口
- * 无入参或传入ModalTypeEnum.ADD 则默认打开添加类型的窗口
+ * 通过 modalRef.current?.show(ModalTypeEnum.EDIT) 的形式打开编辑类型的窗口
+ * 无入参或传入 ModalTypeEnum.ADD 则默认打开添加类型的窗口
  */
 
-interface FormModalProps<Values> extends React.PropsWithoutRef<any>, React.PropsWithChildren {
+interface FormModalProps<Values = any> extends React.PropsWithChildren, PropsWithModalRef {
   loading?: boolean;
 
   /** 弹窗标题 */
@@ -20,24 +21,24 @@ interface FormModalProps<Values> extends React.PropsWithoutRef<any>, React.Props
   /**
    * 表单提交事件
    *
-   * @param record 提交的表单
+   * @param result 提交的表单内容
    * @param modalType 弹窗类型
    */
-  onSubmit?: (record: Values, modalType?: ModalTypeEnum) => void;
+  onSubmit?: (result: Values, modalType?: ModalTypeEnum) => void;
 
   /** 表单初始值 */
   initialValues?: Partial<Values>;
 
-  /** 表单配置 */
+  /** 表单配置项 */
   options?: FormItemProps<Values>[];
 
-  width?: ModalProps["width"];
+  width?: string | number;
 }
 
 type FormModalFC = <Values extends any = any>(props: FormModalProps<Values>) => React.ReactElement;
 
 const FormModal: FormModalFC = props => {
-  const { options = [], initialValues, title = "", onSubmit, children, loading, width } = props;
+  const { options = [], initialValues, title = "", onSubmit, children, loading, width = 700 } = props;
 
   const [form] = Form.useForm();
 
@@ -61,4 +62,4 @@ const FormModal: FormModalFC = props => {
   );
 };
 
-export default withModal(FormModal, { footer: null, width: 600, maskClosable: false }) as FormModalFC;
+export default withModal(FormModal, { footer: null, width: 700, maskClosable: false }) as FormModalFC;

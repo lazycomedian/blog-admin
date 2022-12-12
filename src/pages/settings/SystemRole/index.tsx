@@ -45,7 +45,7 @@ const SystemRole: React.FC = () => {
   /**
    * 添加/编辑保存
    *
-   * @param record
+   * @param result 表单内容
    * @param modalType
    */
   const submit = useMemoizedFn(async (result: SysRoleModel, modalType?: ModalTypeEnum) => {
@@ -71,7 +71,7 @@ const SystemRole: React.FC = () => {
       <Form layout="inline">
         <Space size="large">
           <StatusQueryFormItem onChange={status => getList({ status })} />
-          <Form.Item label="角色名称" name="roleName">
+          <Form.Item label="搜索" name="roleName">
             <Input.Search enterButton allowClear placeholder="请输入角色名称" onSearch={roleName => getList({ roleName })} />
           </Form.Item>
         </Space>
@@ -85,20 +85,14 @@ const SystemRole: React.FC = () => {
           formModalRef.current?.show();
         }}
       >
-        添加身份
+        添加角色
       </Button>
 
       {/* 表格 */}
       <Table rowKey="id" columns={columns} {...tableProps} scroll={{ x: true }} />
 
       {/* 弹窗 */}
-      <FormModal<SysRoleModel>
-        ref={formModalRef}
-        title="角色"
-        loading={submitLoading}
-        initialValues={currentRecord}
-        onSubmit={submit}
-      >
+      <FormModal ref={formModalRef} title="角色" loading={submitLoading} initialValues={currentRecord} onSubmit={submit}>
         <Form.Item label="角色名称" name="roleName" rules={[{ required: true, message: "请输入角色名称" }]}>
           <Input placeholder="请输入角色名称" />
         </Form.Item>

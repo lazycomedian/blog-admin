@@ -1,8 +1,11 @@
 import { StorageKeyEnum } from "@/constants/storage";
+import dayjs from "dayjs";
+import zhCN from "dayjs/locale/zh-cn";
 import { BizStorage } from "./storage";
-
 export { default as dayjs } from "dayjs";
 export * from "./tips";
+
+dayjs.locale(zhCN);
 
 /**
  * 本地存储序列化数据，默认sessionStorage

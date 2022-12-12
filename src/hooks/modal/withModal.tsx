@@ -1,5 +1,5 @@
 import { ModalTypeEnum } from "@/constants";
-import { UniversalModalRef } from "@/typings/common";
+import { PropsWithModalRef, UniversalModalRef } from "@/typings/common";
 import { useMemoizedFn, useSetState } from "ahooks";
 import { Modal, ModalProps } from "antd";
 import React, { forwardRef, memo, useImperativeHandle, useState } from "react";
@@ -8,7 +8,7 @@ import { ModalContext } from ".";
 type WithModal = <PropsType, T extends React.ComponentType<any> = React.ComponentType<PropsType>>(
   Component: T,
   modalProps?: ModalProps
-) => React.NamedExoticComponent<React.ComponentPropsWithRef<React.PropsWithRef<T>> & { ref?: React.Ref<UniversalModalRef> }>;
+) => React.NamedExoticComponent<React.ComponentPropsWithRef<React.PropsWithRef<T>> & PropsWithModalRef>;
 
 export const withModal: WithModal = (Component, modalProps) => {
   return memo(

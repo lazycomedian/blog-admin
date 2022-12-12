@@ -102,7 +102,12 @@ export class BizRequest {
    */
   protected request(method: Method) {
     return async <Data = any>(url: string, data?: any, options: Omit<BizRequestConfig<Data>, "method"> = {}) => {
-      if (method.toLowerCase() === "get") data = { params: data };
+      if (typeof data === "object") {
+        for (const key in data) {
+          if (JSON.stringify(data[key]) === "{}") data[key] = undefined;
+        }
+      }
+      if (method.toUpperCase() === "GET") data = { params: data };
       else data = { data };
 
       const { code = StatusCodeEnum.SUCCESS, ...restOptions } = options;

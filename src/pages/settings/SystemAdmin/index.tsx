@@ -23,13 +23,13 @@ const SystemAdmin: React.FC = () => {
     status: CommonStatusEnum.AVAILABLE
   });
 
-  const formModalRef = useModalRef();
+  const modalRef = useModalRef();
 
   const columns = useColumns({
     reload: () => getList(),
     onEdit: (v, r) => {
       setCurrentRecord(r);
-      formModalRef.current?.show(ModalTypeEnum.EDIT);
+      modalRef.current?.show(ModalTypeEnum.EDIT);
     }
   });
 
@@ -38,7 +38,8 @@ const SystemAdmin: React.FC = () => {
    */
   const { run: getList, tableProps } = useTable(SysAdminService.queryList, {
     defaultPageSize: 15,
-    defaultCurrent: 1
+    defaultCurrent: 1,
+    loadingDelay: 200
   });
 
   /**
@@ -56,7 +57,7 @@ const SystemAdmin: React.FC = () => {
       else await SysAdminService.create(result);
       tips.success(prefixTips + "成功");
       getList();
-      formModalRef.current?.close();
+      modalRef.current?.close();
     } catch (error) {
       tips.error(prefixTips + "失败");
     } finally {
@@ -81,7 +82,7 @@ const SystemAdmin: React.FC = () => {
         icon={<PlusOutlined />}
         onClick={() => {
           resetCurrentRecord();
-          formModalRef.current?.show();
+          modalRef.current?.show();
         }}
       >
         添加管理员
@@ -91,8 +92,8 @@ const SystemAdmin: React.FC = () => {
       <Table rowKey="id" columns={columns} {...tableProps} scroll={{ x: true }} />
 
       {/* 弹窗 */}
-      <FormModal<SysAdminModel>
-        ref={formModalRef}
+      <FormModal
+        ref={modalRef}
         title="管理员"
         width={700}
         loading={submitLoading}

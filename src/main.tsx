@@ -1,19 +1,12 @@
 import ReactDOM from "react-dom/client";
+import { BrowserRouter, HashRouter } from "react-router-dom";
+import BasicRouter from "./router";
 import { StoreProvider } from "./store";
-
-// vite svg注册脚本
-import "virtual:svg-icons-register";
+import { GlobalStyle } from "./theme";
 
 // antd
 import "antd/dist/reset.css";
-import dayjs from "dayjs";
-import "dayjs/locale/zh-cn";
-import { BrowserRouter, HashRouter } from "react-router-dom";
-import BasicRouter from "./router";
-import { GlobalStyle } from "./theme";
 import AntdConfigProvider from "./theme/AntdConfigProvider";
-
-dayjs.locale("zh-cn");
 
 const container = document.getElementById("root")!;
 

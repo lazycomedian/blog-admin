@@ -14,7 +14,7 @@ export enum StatusCodeEnum {
   /**
    * 没有操作权限
    */
-  AUTHORIZED = 40300,
+  UN_AUTHORIZED = 40300,
   /**
    * 系统异常
    */

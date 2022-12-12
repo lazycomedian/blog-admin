@@ -1,9 +1,8 @@
 import react from "@vitejs/plugin-react";
-import { join, resolve } from "path";
+import { join } from "path";
 import { defineConfig, loadEnv } from "vite";
 import viteCompression from "vite-plugin-compression";
 import { createHtmlPlugin } from "vite-plugin-html";
-import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import getProxy from "./config/proxy";
 import { version } from "./package.json";
 
@@ -19,12 +18,6 @@ export default defineConfig(({ mode, command }) => {
         inject: {
           data: { title: env.VITE_APP_TITLE }
         }
-      }),
-      // eslintPlugin(), // EsLint 报错信息显示在浏览器界面上
-      // 使用 svg 图标
-      createSvgIconsPlugin({
-        iconDirs: [resolve(process.cwd(), "src/assets/svgs")],
-        symbolId: "icon-[dir]-[name]"
       }),
       viteCompression({
         // gzip静态资源压缩配置

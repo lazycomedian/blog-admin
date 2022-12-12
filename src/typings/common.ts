@@ -62,3 +62,8 @@ export interface UniversalModalRef {
   /** 关闭弹窗 */
   close: () => void;
 }
+
+/**
+ * 为弹窗props添加ref类型
+ */
+export type PropsWithModalRef<P = unknown> = P & { ref?: React.Ref<UniversalModalRef> };
