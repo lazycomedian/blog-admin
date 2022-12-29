@@ -1,9 +1,10 @@
 import { StorageKeyEnum } from "@/constants/storage";
+import { message } from "antd";
 import dayjs from "dayjs";
 import zhCN from "dayjs/locale/zh-cn";
 import { BizStorage } from "./storage";
 export { default as dayjs } from "dayjs";
-export * from "./tips";
+export * from "./common";
 
 dayjs.locale(zhCN);
 
@@ -19,4 +20,15 @@ dayjs.locale(zhCN);
 export const storage = new BizStorage<StorageKeyEnum>({
   prefix: `@BLOG_${import.meta.env.MODE.toUpperCase()}/`,
   type: "localStorage"
+});
+
+/**
+ * 自动销毁上次调用的antd message
+ *
+ */
+export const tips = new Proxy(message, {
+  get: (target, key) => {
+    target.destroy();
+    return Reflect.get(target, key);
+  }
 });

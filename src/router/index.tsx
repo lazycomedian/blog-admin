@@ -3,6 +3,7 @@ import BasicLayout from "@/layouts";
 import Home from "@/pages/home";
 import Login from "@/pages/login";
 import SystemAdmin from "@/pages/settings/SystemAdmin";
+import SystemMenu from "@/pages/settings/SystemMenu";
 import SystemRole from "@/pages/settings/SystemRole";
 import { storage } from "@/utils";
 import { Navigate, RouteObject, useRoutes } from "react-router-dom";
@@ -46,6 +47,10 @@ const routeConfig: RouteObject[] = [
           {
             path: "/settings/system_admin",
             element: <SystemAdmin />
+          },
+          {
+            path: "/settings/system_menu",
+            element: <SystemMenu />
           }
         ]
       }

@@ -1,2 +1,2 @@
-export * from "./useTable";
 export * from "./useTableColumns";
+export * from "./useTableRequest";

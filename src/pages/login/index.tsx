@@ -1,7 +1,6 @@
 import { StorageKeyEnum } from "@/constants/storage";
 import { LoginService } from "@/service/api";
-import { storage } from "@/utils";
-import { tips } from "@/utils/tips";
+import { storage, tips } from "@/utils";
 import { QqOutlined, WechatOutlined } from "@ant-design/icons";
 import { useRequest } from "ahooks";
 import { Button, Divider, Form, Input } from "antd";

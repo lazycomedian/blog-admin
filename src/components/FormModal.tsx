@@ -3,6 +3,7 @@ import { useModalProps, withModal } from "@/hooks/modal";
 import { PropsWithModalRef } from "@/typings/common";
 import { Button, Form, FormItemProps } from "antd";
 import React, { useEffect } from "react";
+import styled from "styled-components";
 
 /**
  * 表单提交弹窗组件，统一添加/编辑弹窗风格
@@ -14,24 +15,18 @@ import React, { useEffect } from "react";
 
 interface FormModalProps<Values = any> extends React.PropsWithChildren, PropsWithModalRef {
   loading?: boolean;
-
   /** 弹窗标题 */
   title?: string;
-
   /**
    * 表单提交事件
-   *
    * @param result 提交的表单内容
    * @param modalType 弹窗类型
    */
   onSubmit?: (result: Values, modalType?: ModalTypeEnum) => void;
-
   /** 表单初始值 */
   initialValues?: Partial<Values>;
-
   /** 表单配置项 */
   options?: FormItemProps<Values>[];
-
   width?: string | number;
 }
 
@@ -52,14 +47,24 @@ const FormModal: FormModalFC = props => {
   }, [initialValues]);
 
   return (
-    <Form form={form} labelAlign="right" labelCol={{ span: 5 }} onFinish={v => onSubmit && onSubmit(v, modalType)}>
-      {children ?? options.map((item, index) => <Form.Item key={index} {...item}></Form.Item>)}
+    <Wrapper>
+      <Form form={form} labelAlign="right" labelCol={{ span: 5 }} onFinish={v => onSubmit && onSubmit(v, modalType)}>
+        {children ?? options.map((item, index) => <Form.Item key={index} {...item}></Form.Item>)}
 
-      <Button block type="primary" size="large" htmlType="submit" loading={loading}>
-        提交
-      </Button>
-    </Form>
+        <Button block type="primary" size="large" htmlType="submit" loading={loading}>
+          提交
+        </Button>
+      </Form>
+    </Wrapper>
   );
 };
 
 export default withModal(FormModal, { footer: null, width: 700, maskClosable: false }) as FormModalFC;
+
+const Wrapper = styled.div`
+  .ant-btn-lg {
+    height: 36px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+`;

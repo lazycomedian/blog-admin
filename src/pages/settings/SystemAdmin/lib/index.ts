@@ -3,7 +3,7 @@ import { SysAdminModel } from "@/model/sysAdmin";
 import { SysAdminService } from "@/service/api";
 import { UseColumns } from "@/typings/common";
 import { tips } from "@/utils";
-import { getOperationRender, getStatusRender, timeRender } from "@/utils/common";
+import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
 import { useMemoizedFn } from "ahooks";
 
 export const useColumns: UseColumns<SysAdminModel> = ({ reload, onEdit }) => {

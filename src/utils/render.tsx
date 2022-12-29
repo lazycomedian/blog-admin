@@ -17,7 +17,7 @@ export const timeRender: ColumnRender = value => (value ? dayjs(value).format(FO
  *
  * @param onChange 状态改变事件
  */
-export const getStatusRender: GetStatusRender = ({ service, onChange, rowKey }): ColumnRender => {
+export const getStatusRender: GetStatusRender = ({ service, onChange, rowKey }) => {
   return (value, record, index) => (
     <StatusSwitch
       record={record}
@@ -61,7 +61,7 @@ export const getOperationRender: GetOperationRender = (options = []) => {
  * 用于添加/修改Form的状态表单项组件
  */
 export const StatusFormItem: React.FC = () => (
-  <Form.Item label="是否显示" name="status">
+  <Form.Item label="是否开启" name="status">
     <Radio.Group>
       <Radio value={CommonStatusEnum.AVAILABLE}>{getCommonStatusLabel(CommonStatusEnum.AVAILABLE)}</Radio>
       <Radio value={CommonStatusEnum.DISABLED}>{getCommonStatusLabel(CommonStatusEnum.DISABLED)}</Radio>

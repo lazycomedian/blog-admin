@@ -1,14 +1,15 @@
 import FormModal from "@/components/FormModal";
 import { CommonStatusEnum, getModalTypeLabel, ModalTypeEnum } from "@/constants";
-import { useTable } from "@/hooks";
+import { useTableRequest } from "@/hooks";
 import { useModalRef } from "@/hooks/modal";
 import { SysRoleModel } from "@/model/sysRole";
 import { SysRoleService } from "@/service/api";
 import { tips } from "@/utils";
-import { StatusFormItem, StatusQueryFormItem } from "@/utils/common";
+import { StatusFormItem, StatusQueryFormItem } from "@/utils/render";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMemoizedFn, useResetState } from "ahooks";
 import { Button, Form, Input, Space, Table } from "antd";
+import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useColumns } from "./lib";
 
@@ -36,10 +37,9 @@ const SystemRole: React.FC = () => {
   /**
    * 获取列表数据
    */
-  const { run: getList, tableProps } = useTable(SysRoleService.queryList, {
+  const { run: getList, tableProps } = useTableRequest(SysRoleService.queryList, {
     defaultPageSize: 15,
-    defaultCurrent: 1,
-    loadingDelay: 200
+    defaultCurrent: 1
   });
 
   /**
@@ -102,4 +102,4 @@ const SystemRole: React.FC = () => {
   );
 };
 
-export default SystemRole;
+export default observer(SystemRole);

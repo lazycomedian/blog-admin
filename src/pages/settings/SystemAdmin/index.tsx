@@ -1,11 +1,11 @@
 import FormModal from "@/components/FormModal";
 import { CommonStatusEnum, getModalTypeLabel, ModalTypeEnum } from "@/constants";
-import { useTable } from "@/hooks";
+import { useTableRequest } from "@/hooks";
 import { useModalRef } from "@/hooks/modal";
 import { SysAdminModel } from "@/model/sysAdmin";
 import { SysAdminService } from "@/service/api";
 import { tips } from "@/utils";
-import { StatusFormItem, StatusQueryFormItem } from "@/utils/common";
+import { StatusFormItem, StatusQueryFormItem } from "@/utils/render";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMemoizedFn, useResetState } from "ahooks";
 import { Button, Form, Input, Select, Space, Table } from "antd";
@@ -36,10 +36,9 @@ const SystemAdmin: React.FC = () => {
   /**
    * 获取列表数据
    */
-  const { run: getList, tableProps } = useTable(SysAdminService.queryList, {
+  const { run: getList, tableProps } = useTableRequest(SysAdminService.queryList, {
     defaultPageSize: 15,
-    defaultCurrent: 1,
-    loadingDelay: 200
+    defaultCurrent: 1
   });
 
   /**
@@ -92,14 +91,7 @@ const SystemAdmin: React.FC = () => {
       <Table rowKey="id" columns={columns} {...tableProps} scroll={{ x: true }} />
 
       {/* 弹窗 */}
-      <FormModal
-        ref={modalRef}
-        title="管理员"
-        width={700}
-        loading={submitLoading}
-        initialValues={currentRecord}
-        onSubmit={submit}
-      >
+      <FormModal ref={modalRef} title="管理员" loading={submitLoading} initialValues={currentRecord} onSubmit={submit}>
         <Form.Item label="管理员账号" name="username" rules={[{ required: true, message: "请输入管理员账号" }]}>
           <Input placeholder="请输入管理员账号" />
         </Form.Item>

@@ -1,32 +1,62 @@
 import { CommonStatusEnum } from "@/constants";
-import { SysAdminModel, SysAdminQueryModel } from "@/model/sysAdmin";
+import { SysAdminModel, SysAdminQueryVO } from "@/model/sysAdmin";
 import { bizRequest } from "..";
 
 /**
  * 管理员管理接口
  */
 export class SysAdminService {
-  static list() {
+  /**
+   * 获取数据全列表
+   */
+  public static list() {
     return bizRequest.get<SysAdminModel[]>("/admin/sysAdmin");
   }
 
-  static queryList(query?: SysAdminQueryModel) {
+  /**
+   * 条件查询列表
+   *
+   * @param query
+   */
+  public static queryList(query?: SysAdminQueryVO) {
     return bizRequest.get<PageResult<SysAdminModel>>("/admin/sysAdmin/queryList", query);
   }
 
-  static create(query: Omit<SysAdminModel, "createTime" | "id">) {
+  /**
+   * 创建管理员
+   *
+   * @param query
+   */
+  public static create(query: Omit<SysAdminModel, "createTime" | "id">) {
     return bizRequest.post("/admin/sysAdmin", query);
   }
 
-  static modify(id: number, query: Omit<SysAdminModel, "createTime" | "id">) {
+  /**
+   * 编辑管理员
+   *
+   * @param id
+   * @param query
+   */
+  public static modify(id: number, query: Omit<SysAdminModel, "createTime" | "id">) {
     return bizRequest.post("/admin/sysAdmin", { ...query, id });
   }
 
-  static switch(id: number, status: CommonStatusEnum) {
+  /**
+   * 修改管理员状态
+   *
+   * @param id
+   * @param status
+   */
+  public static switch(id: number, status: CommonStatusEnum) {
     return bizRequest.put(`/admin/sysAdmin/${id}/${status}`);
   }
 
-  static remove(id: number) {
+  /**
+   * 删除管理员
+   *
+   * @param id
+   */
+  public static remove(id: number) {
     return bizRequest.delete(`admin/sysAdmin/${id}`);
   }
 }

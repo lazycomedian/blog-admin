@@ -3,7 +3,7 @@ import { SysRoleModel } from "@/model/sysRole";
 import { SysRoleService } from "@/service/api";
 import { UseColumns } from "@/typings/common";
 import { tips } from "@/utils";
-import { getOperationRender, getStatusRender, timeRender } from "@/utils/common";
+import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
 import { useMemoizedFn } from "ahooks";
 
 export const useColumns: UseColumns<SysRoleModel> = ({ reload, onEdit }) => {

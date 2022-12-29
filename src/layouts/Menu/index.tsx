@@ -36,6 +36,10 @@ const Menu: React.FC<MenuProps> = props => {
             {
               key: "/settings/system_admin",
               label: "管理员列表"
+            },
+            {
+              key: "/settings/system_menu",
+              label: "菜单管理"
             }
           ]
         }

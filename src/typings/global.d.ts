@@ -37,14 +37,14 @@ declare interface IPage {
   /**
    * 当前页码
    */
-  current: number;
+  current?: number;
   /**
    * 每页条数
    */
-  pageSize: number;
+  pageSize?: number;
 }
 
-declare interface PageResult<T> extends IPage {
+declare interface PageResult<T> extends Required<IPage> {
   /**
    * 条目总数
    */

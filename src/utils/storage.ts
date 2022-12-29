@@ -4,7 +4,7 @@ interface BizStorageConfig {
   prefix?: string;
   /**
    * 存储类型 localStorage | sessionStorage
-   * 默认为sessionStorage
+   * @default sessionStorage
    */
   type?: BizStorageType;
 }
@@ -25,7 +25,6 @@ export class BizStorage<Key = string> {
    * @param key 存储数据的键
    * @param value 存储的内容
    * @param type 存储类型 localStorage | sessionStorage
-   * 默认为sessionStorage
    */
   public setItem(key: Key, value: any, type?: BizStorageType): void {
     const currentKey = (this.PREFIX || "") + key;

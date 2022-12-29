@@ -1,15 +1,15 @@
 import PaginationIcon from "@/components/PaginationIcon";
-import { useAntdTable, useMemoizedFn } from "ahooks";
+import { useAntdTable } from "ahooks";
 import { AntdTableOptions, Data, Params } from "ahooks/lib/useAntdTable/types";
 import { TablePaginationConfig } from "antd";
 import React, { useMemo } from "react";
 
-interface ServiceQuery extends Partial<IPage>, AnyObject {
+interface ServiceQuery extends IPage, AnyObject {
   sorter?: any;
   filter?: any;
 }
 
-export const useTable = <T extends ServiceQuery = ServiceQuery>(
+export const useTableRequest = <T extends ServiceQuery = ServiceQuery>(
   service: (query?: T) => Promise<any>,
   options: AntdTableOptions<Data, Params> = {}
 ) => {
@@ -24,7 +24,7 @@ export const useTable = <T extends ServiceQuery = ServiceQuery>(
   /**
    * 分页配置
    */
-  const paginationConfig: TablePaginationConfig = useMemo(() => {
+  const paginationConfig = useMemo<TablePaginationConfig>(() => {
     return {
       ...pagination,
       showSizeChanger: true,
@@ -36,17 +36,15 @@ export const useTable = <T extends ServiceQuery = ServiceQuery>(
     };
   }, [pagination]);
 
-  const runner = useMemoizedFn((query?: T) => {
-    run({
-      ...query,
-      current: query?.current ?? defaultCurrent,
-      pageSize: query?.pageSize ?? defaultPageSize
-    });
-  });
-
   return {
     ...result,
-    run: runner,
+    run: (query?: T) => {
+      run({
+        ...query,
+        current: query?.current ?? defaultCurrent,
+        pageSize: query?.pageSize ?? defaultPageSize
+      });
+    },
     pagination: paginationConfig,
     tableProps: { ...tableProps, pagination: paginationConfig }
   };
