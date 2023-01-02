@@ -16,7 +16,8 @@ const token: Partial<AliasToken> = {
   colorPrimary: "#2d8cf0",
   colorLink: "#5594f2",
   borderRadiusLG: 4,
-  borderRadius: 4
+  borderRadius: 4,
+  colorText: "#515a6e"
 };
 
 const AntdConfigProvider: React.FC<React.PropsWithChildren> = ({ children }) => {

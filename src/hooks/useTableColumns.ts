@@ -1,4 +1,4 @@
-import { EMPTY_PLACE_HOLDER } from "@/constants/common";
+import { EMPTY_PLACE_HOLDER, tableColumnWidth } from "@/constants/common";
 import { ColumnType } from "antd/es/table";
 import { useMemo } from "react";
 
@@ -7,7 +7,13 @@ interface ColumnsOptions {
   align?: "left" | "center" | "right";
 }
 
-export const useTableColumns = <RecordType = any>(columns: ColumnType<RecordType>[] = [], options?: ColumnsOptions) => {
+interface IColumnType<R> extends Omit<ColumnType<R>, "key"> {
+  key?: Exclude<keyof R, symbol>;
+}
+
+type UseTableColumns = <R = any>(columns?: Array<IColumnType<R>>, options?: ColumnsOptions) => Array<ColumnType<R>>;
+
+export const useTableColumns: UseTableColumns = (columns = [], options) => {
   const { align, withIndex } = options || {};
 
   return useMemo(() => {
@@ -16,6 +22,13 @@ export const useTableColumns = <RecordType = any>(columns: ColumnType<RecordType
 
       item.dataIndex = item.dataIndex ?? item.key;
       item.align = item.align ?? align;
+
+      setDefaultWidth(item);
+
+      if (typeof item.title === "string" && typeof item.width === "undefined") {
+        item.ellipsis = item.ellipsis ?? true;
+        item.width = getWidthByText(item.title);
+      }
       return item;
     });
 
@@ -23,4 +36,20 @@ export const useTableColumns = <RecordType = any>(columns: ColumnType<RecordType
 
     return finalColumns;
   }, [columns, align, withIndex]);
+};
+
+const setDefaultWidth = (item: IColumnType<any>) => {
+  const key = item.key?.toString().toUpperCase() || "";
+
+  for (const k in tableColumnWidth) {
+    if (key.includes(k)) {
+      item.width = item.width ?? tableColumnWidth[k];
+      break;
+    }
+  }
+};
+
+const getWidthByText = (text: string, fontSize = 12, padding = 16) => {
+  if (typeof text !== "string") return 0;
+  return text.length * fontSize + padding * 2;
 };

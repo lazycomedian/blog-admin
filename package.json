@@ -6,6 +6,7 @@
   "scripts": {
     "start:dev": "vite --mode dev",
     "start:prod": "vite --mode production",
+    "model": "npx yapi-ts --s config/model --dataKey 'data'",
     "build": "rm -rf dist-* & vite build --mode production",
     "prettier": "prettier --write ."
   },

@@ -1,5 +1,5 @@
 import { useTableColumns } from "@/hooks";
-import { SysAdminModel } from "@/model/sysAdmin";
+import { SysAdminModel } from "@/model/settings";
 import { SysAdminService } from "@/service/api";
 import { UseColumns } from "@/typings/common";
 import { tips } from "@/utils";
@@ -23,15 +23,14 @@ export const useColumns: UseColumns<SysAdminModel> = ({ reload, onEdit }) => {
   });
 
   return useTableColumns<SysAdminModel>([
+    { title: "ID", key: "id" },
     { title: "昵称", key: "nickname" },
     { title: "账号", key: "username" },
-    { title: "角色", key: "role" },
     { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysAdminService.switch }) },
     { title: "创建时间", key: "createTime", render: timeRender },
     {
       title: "操作",
       fixed: "right",
-      width: 180,
       align: "center",
       render: getOperationRender([
         { children: "编辑", onClick: onEdit },

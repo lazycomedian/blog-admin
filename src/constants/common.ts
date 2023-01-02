@@ -31,7 +31,7 @@ export const getModalTypeLabel = (modalType: ModalTypeEnum) => {
     case ModalTypeEnum.EDIT:
       return "编辑";
     default:
-      return "";
+      return "操作";
   }
 };
 
@@ -65,7 +65,15 @@ export const getCommonStatusLabel = (status: CommonStatusEnum | string) => {
 /**
  * 通用状态下拉options
  */
-export const statusOptions = [
+export const statusOptions: { readonly label: string; readonly value: CommonStatusEnum }[] = [
   { label: getCommonStatusLabel(CommonStatusEnum.AVAILABLE), value: CommonStatusEnum.AVAILABLE },
   { label: getCommonStatusLabel(CommonStatusEnum.DISABLED), value: CommonStatusEnum.DISABLED }
 ];
+
+/**
+ * 部分常见属性表格列宽
+ */
+export const tableColumnWidth: Record<string, number> = {
+  TIME: 140,
+  STATUS: 90
+};

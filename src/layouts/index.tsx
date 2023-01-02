@@ -12,7 +12,7 @@ const BasicLayout: React.FC = props => {
     <Wrapper>
       <Layout className="i-layout">
         <Layout.Sider trigger={null} className="i-sider" collapsible collapsed={collapsed}>
-          <div className="logo">Cinema</div>
+          <div className="logo">{import.meta.env.VITE_APP_TITLE}</div>
           <Menu />
         </Layout.Sider>
         <Layout className="site-layout">

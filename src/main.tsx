@@ -8,11 +8,9 @@ import { GlobalStyle } from "./theme";
 import "antd/dist/reset.css";
 import AntdConfigProvider from "./theme/AntdConfigProvider";
 
-const container = document.getElementById("root")!;
-
 const RouterMode = __ISDEV__ ? BrowserRouter : HashRouter;
 
-ReactDOM.createRoot(container).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <StoreProvider>
     <AntdConfigProvider>
       {/* 路由 */}

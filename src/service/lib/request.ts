@@ -1,7 +1,6 @@
-import { codeMessage } from "@/constants/exception";
-import { StatusCodeEnum } from "@/constants/http";
+import { codeMessage, HttpMethod, StatusCodeEnum } from "@/constants";
 import { notification } from "antd";
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, Method } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 import AxiosCanceler from "./canceler";
 import NProgress from "./nprogress";
 
@@ -98,16 +97,17 @@ export class BizRequest {
 
   /**
    * 统一请求返回结构
+   *
    * @param method 请求方法
    */
-  protected request(method: Method) {
+  protected request(method: HttpMethod) {
     return async <Data = any>(url: string, data?: any, options: Omit<BizRequestConfig<Data>, "method"> = {}) => {
       if (typeof data === "object") {
         for (const key in data) {
           if (JSON.stringify(data[key]) === "{}") data[key] = undefined;
         }
       }
-      if (method.toUpperCase() === "GET") data = { params: data };
+      if (method.toUpperCase() === HttpMethod.GET) data = { params: data };
       else data = { data };
 
       const { code = StatusCodeEnum.SUCCESS, ...restOptions } = options;
@@ -122,6 +122,7 @@ export class BizRequest {
 
   /**
    * 校验网络请求状态码
+   *
    * @param status
    * @param msg
    */
@@ -135,18 +136,18 @@ export class BizRequest {
   }
 
   public get get() {
-    return this.request("GET");
+    return this.request(HttpMethod.GET);
   }
 
   public get post() {
-    return this.request("POST");
+    return this.request(HttpMethod.POST);
   }
 
   public get put() {
-    return this.request("PUT");
+    return this.request(HttpMethod.PUT);
   }
 
   public get delete() {
-    return this.request("DELETE");
+    return this.request(HttpMethod.DELETE);
   }
 }

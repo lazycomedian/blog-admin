@@ -1,5 +1,5 @@
 import { useTableColumns } from "@/hooks";
-import { SysRoleModel } from "@/model/sysRole";
+import { SysRoleModel } from "@/model/settings";
 import { SysRoleService } from "@/service/api";
 import { UseColumns } from "@/typings/common";
 import { tips } from "@/utils";
@@ -22,7 +22,7 @@ export const useColumns: UseColumns<SysRoleModel> = ({ reload, onEdit }) => {
     }
   });
 
-  return useTableColumns<SysRoleModel>([
+  return useTableColumns([
     { title: "ID", key: "id" },
     { title: "角色名", key: "roleName" },
     { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysRoleService.switch }) },
@@ -31,7 +31,6 @@ export const useColumns: UseColumns<SysRoleModel> = ({ reload, onEdit }) => {
     {
       title: "操作",
       fixed: "right",
-      width: 180,
       align: "center",
       render: getOperationRender([
         { children: "编辑", onClick: onEdit },

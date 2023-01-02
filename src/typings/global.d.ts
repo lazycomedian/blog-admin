@@ -50,7 +50,7 @@ declare interface PageResult<T> extends Required<IPage> {
    */
   total: number;
   /**
-   * 列表响应数据
+   * 列表数据
    */
   list: Array<T>;
 }

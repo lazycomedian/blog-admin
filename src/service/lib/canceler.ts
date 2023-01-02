@@ -6,6 +6,7 @@ export default class AxiosCanceler {
 
   /**
    * 获取序列化参数路径
+   *
    * @param config
    */
   protected static getPathKey(config: AxiosRequestConfig): string {
@@ -14,6 +15,7 @@ export default class AxiosCanceler {
 
   /**
    * 添加取消请求方法
+   *
    * @param config
    */
   public add(config: AxiosRequestConfig): void {
@@ -33,6 +35,7 @@ export default class AxiosCanceler {
 
   /**
    * 移除未完成的请求
+   *
    * @param config
    */
   public remove(config: AxiosRequestConfig): void {
@@ -42,6 +45,7 @@ export default class AxiosCanceler {
 
   /**
    * 取消未完成的请求并移除
+   *
    * @param config
    * @param message
    */

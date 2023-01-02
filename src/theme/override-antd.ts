@@ -15,16 +15,6 @@ export const overrideAntdCss = css`
     z-index: 2;
   }
 
-  /** <---- card style */
-  /* .ant-card-body {
-    padding: 12px;
-  }
-
-  .ant-card-head {
-    padding: 0 16px;
-  } */
-  /* card style ----> */
-
   /** <---- table style   */
   .ant-table {
     border-top: 1px dashed #e8eaec !important;
@@ -34,16 +24,17 @@ export const overrideAntdCss = css`
   }
   .ant-table .ant-table-cell {
     font-size: 12px;
-    color: #5a516e;
     white-space: nowrap;
+    overflow-wrap: normal !important;
+  }
+  .minWidth {
+    min-width: 200px;
   }
   .ant-table-pagination * {
     font-size: 14px;
-    color: #5a516e;
   }
   .ant-table-thead > tr > th {
     background: #fff !important;
-    color: #5a516e;
     padding: 11px 16px;
     border-bottom: 1px solid #e8eaec;
   }
@@ -74,6 +65,10 @@ export const overrideAntdCss = css`
 
   .ant-space-vertical {
     width: 100%;
+  }
+
+  .ant-typography {
+    margin-bottom: 0 !important;
   }
 
   /**  <---- modal style   */
@@ -112,6 +107,13 @@ export const overrideAntdCss = css`
     padding: 34px 36px 24px;
   } */
 
+  .ant-table-row-expand-icon,
+  .ant-table-row-expand-icon-collapsed {
+    margin-top: 0 !important;
+  }
+  .ant-input-clear-icon-has-suffix {
+    margin-top: 2px !important;
+  }
   /* modal style ----> */
 
   .ant-pagination {
