@@ -1,11 +1,9 @@
-import { CommonStatusEnum } from "@/constants";
+import { CommonStatusEnum } from "@/enums";
 import { QueryModel, QueryPageModel, SaveOrUpdateModel } from "@/model/common";
-import { SysAdminModel, SysMenuModel, SysRoleModel } from "@/model/settings";
-import { bizRequest } from "..";
+import { SysAdminModel, SysMenuModel, SysRoleModel, UserMenuModel } from "@/model/settings";
+import { bizRequest } from "@/utils";
 
-/**
- * 角色管理接口
- */
+/** 角色管理接口 */
 export class SysRoleService {
   /**
    * 全量获取角色列表
@@ -16,7 +14,6 @@ export class SysRoleService {
 
   /**
    * 条件查询角色列表
-   *
    * @param query
    */
   public static queryList(query?: QueryPageModel) {
@@ -25,7 +22,6 @@ export class SysRoleService {
 
   /**
    * 添加或修改角色
-   *
    * @param query
    */
   public static saveOrUpdate(query: SaveOrUpdateModel<SysRoleModel>) {
@@ -34,7 +30,6 @@ export class SysRoleService {
 
   /**
    * 修改角色状态
-   *
    * @param id
    * @param status
    */
@@ -44,7 +39,6 @@ export class SysRoleService {
 
   /**
    * 删除角色
-   *
    * @param id
    */
   public static remove(id: number) {
@@ -52,9 +46,7 @@ export class SysRoleService {
   }
 }
 
-/**
- * 管理员列表接口
- */
+/** 管理员列表接口 */
 export class SysAdminService {
   /**
    * 全量获取管理员列表
@@ -65,7 +57,6 @@ export class SysAdminService {
 
   /**
    * 条件查询列表
-   *
    * @param query
    */
   public static queryList(query?: QueryPageModel) {
@@ -74,7 +65,6 @@ export class SysAdminService {
 
   /**
    * 添加或修改管理员
-   *
    * @param query
    */
   public static saveOrUpdate(query: SaveOrUpdateModel<SysAdminModel>) {
@@ -83,7 +73,6 @@ export class SysAdminService {
 
   /**
    * 修改管理员状态
-   *
    * @param id
    * @param status
    */
@@ -93,7 +82,6 @@ export class SysAdminService {
 
   /**
    * 删除管理员
-   *
    * @param id
    */
   public static remove(id: number) {
@@ -101,13 +89,10 @@ export class SysAdminService {
   }
 }
 
-/**
- * 菜单管理接口
- */
+/** 菜单管理接口 */
 export class SysMenuService {
   /**
    * 全量获取菜单列表
-   *
    * @param query
    */
   public static findAll(query?: QueryModel) {
@@ -116,7 +101,6 @@ export class SysMenuService {
 
   /**
    * 条件查询菜单列表
-   *
    * @param query
    */
   public static queryList(query?: QueryPageModel) {
@@ -125,7 +109,6 @@ export class SysMenuService {
 
   /**
    * 添加或修改菜单
-   *
    * @param query
    */
   public static saveOrUpdate(query: SaveOrUpdateModel<SysMenuModel>) {
@@ -134,7 +117,6 @@ export class SysMenuService {
 
   /**
    * 修改菜单状态
-   *
    * @param id
    * @param status
    */
@@ -144,10 +126,16 @@ export class SysMenuService {
 
   /**
    * 删除菜单
-   *
    * @param id
    */
   public static remove(id: number) {
     return bizRequest.delete(`/admin/sysMenu/${id}`);
+  }
+
+  /**
+   * 获取用户菜单渲染用列表
+   */
+  public static getUserMenu() {
+    return bizRequest.get<UserMenuModel[]>("/admin/user/menu");
   }
 }

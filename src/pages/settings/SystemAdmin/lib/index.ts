@@ -1,7 +1,7 @@
 import { useTableColumns } from "@/hooks";
 import { SysAdminModel } from "@/model/settings";
-import { SysAdminService } from "@/service/api";
-import { UseColumns } from "@/typings/common";
+import { SysAdminService } from "@/service";
+import { UseColumns } from "@/typings/biz";
 import { tips } from "@/utils";
 import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
 import { useMemoizedFn } from "ahooks";
@@ -9,7 +9,6 @@ import { useMemoizedFn } from "ahooks";
 export const useColumns: UseColumns<SysAdminModel> = ({ reload, onEdit }) => {
   /**
    * 删除管理员
-   *
    * @param id
    */
   const remove = useMemoizedFn(async (id: number) => {

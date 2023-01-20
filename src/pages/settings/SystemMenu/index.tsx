@@ -1,25 +1,26 @@
 import AddButton from "@/components/AddButton";
 import FormModal, { useFormModalRef } from "@/components/FormModal";
 import IconPicker from "@/components/IconPicker";
-import { CommonStatusEnum, getModalTypeLabel, ModalTypeEnum } from "@/constants";
+import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import { useTableExpand } from "@/hooks";
 import { useModalRef } from "@/hooks/modal";
 import { SaveOrUpdateModel } from "@/model/common";
 import { SysMenuModel } from "@/model/settings";
-import { SysMenuService } from "@/service/api";
-import { getAntdIconNode, tips } from "@/utils";
+import { SysMenuService } from "@/service";
+import { useStore } from "@/store";
+import { tips } from "@/utils";
+import { getAntdIconNode, getModalTypeLabel } from "@/utils/biz";
 import { StatusFormItem, StatusQueryFormItem } from "@/utils/render";
 import { CrownFilled } from "@ant-design/icons";
+import { concatString } from "@sentimental/toolkit";
 import { useMemoizedFn, useRequest } from "ahooks";
 import { Form, Input, InputNumber, Space, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useColumns } from "./lib";
 
-/**
- * 菜单管理模块
- *
- */
 const SystemMenu: React.FC = props => {
+  const { userStore } = useStore();
+
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [currentIconName, setCurrentIconName] = useState<string>();
@@ -35,20 +36,22 @@ const SystemMenu: React.FC = props => {
   });
 
   const columns = useColumns({
-    reload: () => run(),
+    reload: () => {
+      run();
+      userStore.updateUserMenu();
+    },
     onEdit: (v, record) => formModalRef.show(ModalTypeEnum.EDIT, record),
     onAdd: (v, record) => {
       formModalRef.show(ModalTypeEnum.ADD, {
         pid: record.id,
         status: CommonStatusEnum.AVAILABLE,
-        prefixPath: (record.prefixPath || "") + (record.path || "")
+        prefixPath: concatString(record.prefixPath, record.path)
       });
     }
   });
 
   /**
    * 添加/编辑保存
-   *
    * @param result 表单内容
    */
   const submit = useMemoizedFn(async (result: SaveOrUpdateModel<SysMenuModel>) => {
@@ -61,6 +64,7 @@ const SystemMenu: React.FC = props => {
       await SysMenuService.saveOrUpdate(result);
       tips.success(prefixTips + "成功");
       run();
+      userStore.updateUserMenu();
       formModalRef.close();
     } catch (error) {
       tips.error(prefixTips + "失败");
@@ -101,67 +105,66 @@ const SystemMenu: React.FC = props => {
           expandable={tableExpand}
           scroll={{ x: true }}
         />
-
-        {/* 弹窗 */}
-        <FormModal
-          ref={formModalRef}
-          title="菜单"
-          loading={submitLoading}
-          initialValues={formModalRef.currentRecord}
-          onSubmit={submit}
-        >
-          <Form.Item label="菜单名称" name="name" rules={[{ required: true, message: "请输入菜单名称" }]}>
-            <Input allowClear placeholder="请输入菜单名称" />
-          </Form.Item>
-          <Form.Item
-            label="图标"
-            name="icon"
-            rules={[
-              { required: true, message: "请输入或选择图标名称" },
-              {
-                message: "请输入或选择正确的图标",
-                validator: async (rule, value) => {
-                  if (!value) return Promise.resolve();
-                  if (!getAntdIconNode(currentIconName)) return Promise.reject();
-                }
-              }
-            ]}
-          >
-            <Input
-              placeholder="请输入图标名称，点击右侧可选择"
-              prefix={getAntdIconNode(currentIconName)}
-              allowClear
-              onChange={e => setCurrentIconName(e.target.value)}
-              suffix={<CrownFilled className="cursor-pointer" onClick={() => iconPickerRef.current?.show()} />}
-            />
-          </Form.Item>
-          <Form.Item label="页面路由" name="path">
-            <Input
-              allowClear
-              addonBefore={
-                formModalRef.currentRecord?.prefixPath && (
-                  <Typography.Paragraph
-                    ellipsis={{ tooltip: { children: formModalRef.currentRecord.prefixPath } }}
-                    style={{ maxWidth: 150 }}
-                  >
-                    {formModalRef.currentRecord.prefixPath}
-                  </Typography.Paragraph>
-                )
-              }
-              placeholder="请输入页面路由"
-            />
-          </Form.Item>
-          <Form.Item label="组件路径" name="component">
-            <Input allowClear placeholder="请输入组件路径" />
-          </Form.Item>
-          <Form.Item label="排序" name="sort" rules={[{ required: true, message: "请输入排序" }]}>
-            <InputNumber placeholder="请输入排序" min={1} />
-          </Form.Item>
-          <StatusFormItem />
-        </FormModal>
       </Space>
 
-      {/* modal */}
+      {/* 弹窗 */}
+      <FormModal
+        ref={formModalRef}
+        title="菜单"
+        loading={submitLoading}
+        initialValues={formModalRef.currentRecord}
+        onSubmit={submit}
+      >
+        <Form.Item label="菜单名称" name="name" rules={[{ required: true, message: "请输入菜单名称" }]}>
+          <Input allowClear placeholder="请输入菜单名称" />
+        </Form.Item>
+        <Form.Item
+          label="图标"
+          name="icon"
+          rules={[
+            { required: true, message: "请输入或选择图标名称" },
+            {
+              message: "请输入或选择正确的图标",
+              validator: async (rule, value) => {
+                if (!value) return Promise.resolve();
+                if (!getAntdIconNode(currentIconName)) return Promise.reject();
+              }
+            }
+          ]}
+        >
+          <Input
+            placeholder="请输入图标名称，点击右侧可选择"
+            prefix={getAntdIconNode(currentIconName)}
+            allowClear
+            onChange={e => setCurrentIconName(e.target.value)}
+            suffix={<CrownFilled className="cursor-pointer" onClick={() => iconPickerRef.current?.show()} />}
+          />
+        </Form.Item>
+        <Form.Item label="页面路由" name="path">
+          <Input
+            allowClear
+            addonBefore={
+              formModalRef.currentRecord?.prefixPath && (
+                <Typography.Paragraph
+                  ellipsis={{ tooltip: { children: formModalRef.currentRecord.prefixPath } }}
+                  style={{ maxWidth: 150 }}
+                >
+                  {formModalRef.currentRecord.prefixPath}
+                </Typography.Paragraph>
+              )
+            }
+            placeholder="请输入页面路由"
+          />
+        </Form.Item>
+        <Form.Item label="组件路径" name="component">
+          <Input allowClear placeholder="请输入组件路径" />
+        </Form.Item>
+        <Form.Item label="排序" name="sort" rules={[{ required: true, message: "请输入排序" }]}>
+          <InputNumber placeholder="请输入排序" min={1} />
+        </Form.Item>
+        <StatusFormItem />
+      </FormModal>
+
       <IconPicker
         ref={iconPickerRef}
         onSelect={iconName => {

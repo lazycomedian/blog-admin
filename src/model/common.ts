@@ -1,8 +1,6 @@
-import { CommonStatusEnum } from "@/constants";
+import { CommonStatusEnum } from "@/enums";
 
-/**
- * 常用字段基类模型
- */
+/** 常用字段基类型模型 */
 export interface BaseModel {
   /**
    * 主键id
@@ -22,9 +20,7 @@ export interface BaseModel {
   // updateTime: string;
 }
 
-/**
- * 通用查询模型
- */
+/** 通用查询模型 */
 export interface QueryModel {
   /**
    * 查询内容
@@ -36,14 +32,10 @@ export interface QueryModel {
   status?: CommonStatusEnum;
 }
 
-/**
- * 通用分页查询模型
- */
+/** 通用分页查询模型 */
 export interface QueryPageModel extends QueryModel, IPage {}
 
-/**
- * 通用添加或修改模型
- */
+/** 通用添加或修改模型 */
 export type SaveOrUpdateModel<T extends BaseModel> = Omit<T, "id" | "createTime"> & {
   /**
    * 主键id

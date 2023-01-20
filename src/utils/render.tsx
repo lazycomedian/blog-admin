@@ -1,20 +1,20 @@
 import StatusSwitch from "@/components/StatusSwitch";
-import { CommonStatusEnum, EMPTY_PLACE_HOLDER, FORMAT, getCommonStatusLabel, statusOptions } from "@/constants";
-import type { ColumnRender, GetOperationRender, GetStatusRender } from "@/typings/common";
+import { EMPTY_PLACE_HOLDER, FORMAT } from "@/constants";
+import { CommonStatusEnum } from "@/enums";
+import { ColumnRender, GetOperationRender, GetStatusRender } from "@/typings/biz";
 import { Divider, Form, Popconfirm, Radio, Select, SelectProps, Typography } from "antd";
 import React from "react";
 import { dayjs } from ".";
+import { getCommonStatusLabel } from "./biz";
 
 /**
  * 通用时间渲染方法，用于table表格列配置
- *
  * @param value
  */
 export const timeRender: ColumnRender = value => (value ? dayjs(value).format(FORMAT) : EMPTY_PLACE_HOLDER);
 
 /**
  * 获取通用状态渲染方法，用于table表格列配置
- *
  * @param onChange 状态改变事件
  */
 export const getStatusRender: GetStatusRender = ({ service, onChange, rowKey }) => {
@@ -30,7 +30,6 @@ export const getStatusRender: GetStatusRender = ({ service, onChange, rowKey }) 
 
 /**
  * 获取表格操作列render，用于table表格列配置
- *
  * @param options 配置项
  */
 export const getOperationRender: GetOperationRender = (options = []) => {
@@ -71,11 +70,19 @@ export const StatusFormItem: React.FC = () => (
 
 /**
  * 用于查询Form的状态表单组件
- *
  * @param onChange
  */
 export const StatusQueryFormItem: React.FC<Pick<SelectProps, "onChange">> = ({ onChange }) => (
   <Form.Item label="状态" name="status">
-    <Select options={statusOptions} placeholder="请选择" allowClear className="i-query-select" onChange={onChange} />
+    <Select
+      options={[
+        { label: getCommonStatusLabel(CommonStatusEnum.AVAILABLE), value: CommonStatusEnum.AVAILABLE },
+        { label: getCommonStatusLabel(CommonStatusEnum.DISABLED), value: CommonStatusEnum.DISABLED }
+      ]}
+      placeholder="请选择"
+      allowClear
+      className="i-query-select"
+      onChange={onChange}
+    />
   </Form.Item>
 );

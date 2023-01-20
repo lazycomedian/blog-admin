@@ -1,3 +1,4 @@
+/** 请求成功返回状态码 */
 export enum StatusCodeEnum {
   /**
    * 成功
@@ -37,32 +38,22 @@ export enum StatusCodeEnum {
   USERNAME_NOT_EXIST = 52002
 }
 
-/**
- * 常见的contentTyp类型
- */
+/** 常见的contentTyp类型 */
 export enum ContentTypeEnum {
-  /** json */
+  /**
+   * json格式
+   */
   JSON = "application/json;charset=UTF-8",
-  /** test */
+  /**
+   * 文本格式
+   */
   TEXT = "text/plain;charset=UTF-8",
-  /** form-data 一般配合qs */
+  /**
+   * 序列化表单格式，配合qs
+   */
   FORM_URLENCODED = "application/x-www-form-urlencoded;charset=UTF-8",
-  /** form-data 上传 */
+  /**
+   * 表单格式
+   */
   FORM_DATA = "multipart/form-data;charset=UTF-8"
-}
-
-/**
- * 常见http请求方式
- */
-export enum HttpMethod {
-  GET = "GET",
-  POST = "POST",
-  PUT = "PUT",
-  DELETE = "DELETE",
-  OPTIONS = "OPTIONS",
-  HEAD = "HEAD",
-  PATCH = "PATCH",
-  PURGE = "PURGE",
-  LINK = "LINK",
-  UNLINK = "UNLINK"
 }

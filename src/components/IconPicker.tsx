@@ -1,6 +1,6 @@
 import { withModal } from "@/hooks/modal";
-import { getAntdIconNames } from "@/utils";
-import * as antdIcons from "@ant-design/icons";
+import { getAntdIconNames, getAntdIconNode } from "@/utils/biz";
+import { SearchOutlined } from "@ant-design/icons";
 import { Col, Divider, Empty, Input, Row } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -14,12 +14,12 @@ const IconPicker: React.FC<IconPickerProps> = ({ onSelect }) => {
 
   return (
     <Wrapper>
-      <Input.Search
+      <Input
+        addonBefore={<SearchOutlined />}
         className="search_input"
         allowClear
         placeholder="在此搜索图标，注意搜索内容为图标代码"
         onChange={e => setIconNames(getAntdIconNames(e.target.value))}
-        onSearch={v => setIconNames(getAntdIconNames(v))}
       />
 
       <div className="icon_container">
@@ -32,7 +32,7 @@ const IconPicker: React.FC<IconPickerProps> = ({ onSelect }) => {
                 {item.iconNames.map(iconName => (
                   <Col span={3} key={iconName}>
                     <div className="icon" onClick={() => onSelect && onSelect(iconName)}>
-                      {React.createElement(Reflect.get(antdIcons, iconName))}
+                      {getAntdIconNode(iconName)}
                     </div>
                   </Col>
                 ))}

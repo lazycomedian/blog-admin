@@ -1,19 +1,14 @@
 import React from "react";
-import { ThemeStore } from "./theme";
-import { UserStore } from "./user";
+import { UserStore } from "./UserStore";
 
-/**
- * 装配所有状态仓库
- */
-const store = {
-  themeStore: new ThemeStore(),
+const store = <const>{
   userStore: new UserStore()
 };
 
-const storeContext = React.createContext(store);
+const StoreContext = React.createContext(store);
 
 export const StoreProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  return React.createElement(storeContext.Provider, { value: store }, children);
+  return React.createElement(StoreContext.Provider, { value: store }, children);
 };
 
-export const useStore = () => React.useContext(storeContext);
+export const useStore = () => React.useContext(StoreContext);

@@ -1,11 +1,32 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
-import { memo } from "react";
+import { SpinIndicator } from "antd/es/spin";
+import React, { memo, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-const Loading: React.FC<{ tip: string }> = ({ tip }) => {
+interface LoadingProps {
+  tip?: string;
+  loadingDelay?: number;
+}
+
+const Loading: React.FC<LoadingProps> = ({ tip, loadingDelay }) => {
+  const [content, setContent] = useState<SpinIndicator>(<LoadingOutlined spin />);
+
+  const timer = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    if (loadingDelay) {
+      setContent(<span></span>);
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => {
+        setContent(<LoadingOutlined spin />);
+      }, loadingDelay);
+    }
+  }, [loadingDelay]);
+
   return (
     <Wrapper>
-      <Spin tip={tip} size="large" />
+      <Spin tip={tip} size="large" indicator={content} />
     </Wrapper>
   );
 };

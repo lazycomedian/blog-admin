@@ -1,65 +1,24 @@
-import { StorageKeyEnum } from "@/constants/storage";
 import BasicLayout from "@/layouts";
-import Home from "@/pages/home";
+import NotFound from "@/layouts/ErrorPage/404";
 import Login from "@/pages/login";
-import SystemAdmin from "@/pages/settings/SystemAdmin";
-import SystemMenu from "@/pages/settings/SystemMenu";
-import SystemRole from "@/pages/settings/SystemRole";
-import { storage } from "@/utils";
-import { Navigate, RouteObject, useRoutes } from "react-router-dom";
+import { useStore } from "@/store";
+import { useMemo } from "react";
+import { useRoutes } from "react-router-dom";
 
-const files = import.meta.glob("@/pages/**/index.tsx", { eager: true });
-for (const key in files) {
-  console.log(key);
-}
+export default function BasicRouter() {
+  const { userStore } = useStore();
 
-const RouteGuard = () => {
-  const token = storage.getItem(StorageKeyEnum.token);
-  return !token ? <BasicLayout /> : <Navigate to="/login" />;
-};
-
-const routeConfig: RouteObject[] = [
-  {
-    path: "/login",
-    element: <Login />
-  },
-  {
-    path: "/",
-    element: <RouteGuard />,
-    children: [
+  const routeConfig = useMemo(() => {
+    return [
+      { path: "/login", element: <Login /> },
       {
-        path: "/home",
-        element: <Home />,
-        children: [
-          {
-            path: "/home/test",
-            element: <div>123</div>
-          }
-        ]
+        path: "/",
+        element: <BasicLayout />,
+        children: userStore.menuRoutes
       },
-      {
-        path: "/settings",
-        children: [
-          {
-            path: "/settings/system_role",
-            element: <SystemRole />
-          },
-          {
-            path: "/settings/system_admin",
-            element: <SystemAdmin />
-          },
-          {
-            path: "/settings/system_menu",
-            element: <SystemMenu />
-          }
-        ]
-      }
-    ]
-  }
-];
+      { path: "*", element: <NotFound /> }
+    ];
+  }, [userStore.menuRoutes]);
 
-const BasicRouter = () => {
   return useRoutes(routeConfig);
-};
-
-export default BasicRouter;
+}

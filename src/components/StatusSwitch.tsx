@@ -1,5 +1,6 @@
-import { CommonStatusEnum, getCommonStatusLabel } from "@/constants";
-import { tips } from "@/utils";
+import { CommonStatusEnum } from "@/enums";
+import { logger, tips } from "@/utils";
+import { getCommonStatusLabel } from "@/utils/biz";
 import { useRequest } from "ahooks";
 import { Switch } from "antd";
 import React, { memo } from "react";
@@ -14,7 +15,7 @@ interface StatusSwitchProps {
 }
 
 const StatusSwitch: React.FC<StatusSwitchProps> = props => {
-  const { service = async () => console.warn("StatusSwitch: 缺少修改状态接口"), onChange, rowKey = "id", record } = props;
+  const { service = async () => logger.warning("StatusSwitch: 缺少修改状态接口"), onChange, rowKey = "id", record } = props;
 
   const { loading, run: update } = useRequest(service, {
     manual: true,

@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 /**
  * 重写表格的展开样式
- *
  * @param rowKey
  */
 export const useTableExpand = (rowKey: string = "id"): ExpandableConfig<any> => {

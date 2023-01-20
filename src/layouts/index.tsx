@@ -1,26 +1,39 @@
+import { CommonRouteEnum, StorageKeyEnum } from "@/enums";
+import { storage } from "@/utils";
 import { Card, Layout } from "antd";
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "./Header";
 import Menu from "./Menu";
+import octocat from "/octocat.svg";
 
-const BasicLayout: React.FC = props => {
+const BasicLayout: React.FC = () => {
+  if (storage.has(StorageKeyEnum.token)) return <Navigate to={CommonRouteEnum.LOGIN} />;
+
+  const navigate = useNavigate();
+
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Wrapper>
       <Layout className="i-layout">
         <Layout.Sider trigger={null} className="i-sider" collapsible collapsed={collapsed}>
-          <div className="logo">{import.meta.env.VITE_APP_TITLE}</div>
+          <div className="logo" onClick={() => navigate(CommonRouteEnum.HOME)}>
+            <img src={octocat} className="octocat" alt="" />
+            {!collapsed && <div className="title">{import.meta.env.VITE_APP_TITLE}</div>}
+          </div>
+
+          {/* 菜单 */}
           <Menu />
         </Layout.Sider>
+
         <Layout className="site-layout">
           <Header collapsed={collapsed} onTriggerClick={() => setCollapsed(prev => !prev)} />
 
           <Layout.Content className="content">
             {/* 路由占位 */}
-            <Card className="content-card">
+            <Card className="content-card" bordered={false}>
               <Outlet />
             </Card>
           </Layout.Content>
@@ -42,7 +55,7 @@ const Wrapper = styled.div`
   }
 
   .content {
-    padding: 24px 16px;
+    padding: 16px 16px;
     overflow-y: auto;
     background: #f5f7f9;
 
@@ -57,6 +70,7 @@ const Wrapper = styled.div`
 
   .i-sider {
     background: #191a23;
+    box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
   }
 
   .ant-menu {
@@ -64,6 +78,7 @@ const Wrapper = styled.div`
   }
 
   .logo {
+    border-bottom: 1px solid #101117;
     height: 64px;
     background: transparent;
     font-size: 20px;
@@ -73,8 +88,12 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    img {
+
+    .octocat {
       width: 24px;
+    }
+    .title {
+      margin-left: 10px;
     }
   }
 `;

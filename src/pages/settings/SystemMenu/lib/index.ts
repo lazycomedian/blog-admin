@@ -1,15 +1,17 @@
 import { useTableColumns } from "@/hooks";
 import { SysMenuModel } from "@/model/settings";
-import { SysMenuService } from "@/service/api";
-import { UseColumns } from "@/typings/common";
-import { getAntdIconNode, tips } from "@/utils";
+import { SysMenuService } from "@/service";
+import { UseColumns } from "@/typings/biz";
+import { tips } from "@/utils";
+import { getAntdIconNode } from "@/utils/biz";
 import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
+import { concatString } from "@sentimental/toolkit";
 import { useMemoizedFn } from "ahooks";
+import React from "react";
 
 export const useColumns: UseColumns<SysMenuModel> = ({ reload, onEdit, onAdd }) => {
   /**
    * 删除菜单
-   *
    * @param id
    */
   const remove = useMemoizedFn(async (id: number) => {
@@ -23,9 +25,9 @@ export const useColumns: UseColumns<SysMenuModel> = ({ reload, onEdit, onAdd }) 
   });
 
   return useTableColumns<SysMenuModel>([
-    { title: "菜单名称", key: "name", width: 140 },
-    { title: "图标", key: "icon", width: 80, render: icon => getAntdIconNode(icon, { style: { fontSize: 18 } }) },
-    { title: "页面路由", key: "path", width: 180, ellipsis: true, render: (v, r) => (r.prefixPath || "") + (v || "") },
+    { title: React.createElement("div", { style: { marginLeft: 20 } }, "菜单名称"), key: "name", width: 130 },
+    { title: "图标", key: "icon", width: 70, render: icon => getAntdIconNode(icon, { style: { fontSize: 18 } }) },
+    { title: "页面路由", key: "path", width: 180, ellipsis: true, render: (v, r) => concatString(r.prefixPath, v) },
     { title: "组件路径", key: "component", width: 160, render: v => v ?? "目录" },
     { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysMenuService.switch }) },
     { title: "排序", key: "sort" },

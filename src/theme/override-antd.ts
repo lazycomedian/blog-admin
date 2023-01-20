@@ -71,6 +71,12 @@ export const overrideAntdCss = css`
     margin-bottom: 0 !important;
   }
 
+  .ant-menu {
+    .ant-menu-item:not(.ant-menu-item-selected):active {
+      background-color: unset !important;
+    }
+  }
+
   /**  <---- modal style   */
   .ant-modal {
     .ant-modal-content {

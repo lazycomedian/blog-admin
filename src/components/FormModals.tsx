@@ -1,4 +1,3 @@
-import { getModalTypeLabel, ModalTypeEnum } from "@/constants";
 import { useModalProps, withModal } from "@/hooks/modal";
 import { PropsWithModalRef } from "@/typings/common";
 import { Button, Form, FormItemProps } from "antd";
@@ -42,13 +41,7 @@ const FormModal: FormModalFC = props => {
 
   const [formInstance] = Form.useForm();
 
-  const { modalType } = useModalProps(
-    () => ({
-      width,
-      title: `${getModalTypeLabel(modalType || ModalTypeEnum.ADD)}${title}`
-    }),
-    { formInstance }
-  );
+  useModalProps(() => ({ width }));
 
   useEffect(() => {
     formInstance.setFieldsValue(initialValues);

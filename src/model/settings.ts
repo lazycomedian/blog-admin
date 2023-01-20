@@ -61,3 +61,10 @@ export interface SysMenuModel extends BaseModel {
    */
   children?: SysMenuModel[];
 }
+
+export interface UserMenuModel extends BaseModel, Pick<SysMenuModel, "name" | "path" | "component" | "icon" | "prefixPath"> {
+  /**
+   * 用户子菜单列表
+   */
+  children?: UserMenuModel[];
+}

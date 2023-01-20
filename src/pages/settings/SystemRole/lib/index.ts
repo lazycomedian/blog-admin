@@ -1,7 +1,7 @@
 import { useTableColumns } from "@/hooks";
 import { SysRoleModel } from "@/model/settings";
-import { SysRoleService } from "@/service/api";
-import { UseColumns } from "@/typings/common";
+import { SysRoleService } from "@/service";
+import { UseColumns } from "@/typings/biz";
 import { tips } from "@/utils";
 import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
 import { useMemoizedFn } from "ahooks";
@@ -9,7 +9,6 @@ import { useMemoizedFn } from "ahooks";
 export const useColumns: UseColumns<SysRoleModel> = ({ reload, onEdit }) => {
   /**
    * 删除角色
-   *
    * @param id
    */
   const remove = useMemoizedFn(async (id: number) => {

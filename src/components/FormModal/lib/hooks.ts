@@ -1,4 +1,4 @@
-import { ModalTypeEnum } from "@/constants";
+import { ModalTypeEnum } from "@/enums";
 import { useMemoizedFn } from "ahooks";
 import { useRef, useState } from "react";
 import type { FormModalRef, UseFormModalRef } from "./types";

@@ -3,7 +3,6 @@ import { join } from "path";
 import { defineConfig, loadEnv } from "vite";
 import viteCompression from "vite-plugin-compression";
 import { createHtmlPlugin } from "vite-plugin-html";
-import getProxy from "./config/proxy";
 import { version } from "./package.json";
 
 const envDir = join(__dirname, "env");
@@ -79,7 +78,12 @@ export default defineConfig(({ mode, command }) => {
       __ISPROD__: command === "build"
     },
     server: {
-      proxy: getProxy(env),
+      proxy: {
+        "/api": {
+          target: env.VITE_BASE_URL,
+          changeOrigin: true
+        }
+      },
       port: env.VITE_PORT,
       open: true,
       host: "0.0.0.0" // 服务器主机名，如果允许外部访问，可设置为"0.0.0.0"

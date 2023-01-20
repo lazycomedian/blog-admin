@@ -1,4 +1,4 @@
-import type { ModalTypeEnum } from "@/constants";
+import { ModalTypeEnum } from "@/enums";
 import type { BaseModel } from "@/model/common";
 import type { PropsWithModalRef, UniversalModalRef } from "@/typings/common";
 import type { FormInstance, FormItemProps } from "antd";

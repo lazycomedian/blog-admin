@@ -1,21 +1,18 @@
 import AddButton from "@/components/AddButton";
 import FormModal, { useFormModalRef } from "@/components/FormModal";
-import { CommonStatusEnum, getModalTypeLabel, ModalTypeEnum } from "@/constants";
+import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import { useTableRequest } from "@/hooks";
 import { SaveOrUpdateModel } from "@/model/common";
 import { SysAdminModel } from "@/model/settings";
-import { SysAdminService } from "@/service/api";
+import { SysAdminService } from "@/service";
 import { tips } from "@/utils";
+import { getModalTypeLabel } from "@/utils/biz";
 import { StatusFormItem, StatusQueryFormItem } from "@/utils/render";
 import { useMemoizedFn } from "ahooks";
 import { Form, Input, Select, Space, Table } from "antd";
 import React, { useState } from "react";
 import { useColumns } from "./lib";
 
-/**
- * 管理员列表模块
- *
- */
 const SystemAdmin: React.FC = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -27,16 +24,13 @@ const SystemAdmin: React.FC = () => {
     onEdit: (v, r) => formModalRef.show(ModalTypeEnum.EDIT, r)
   });
 
-  /**
-   * 获取列表数据
-   */
+  // 获取列表数据
   const { run: getList, tableProps } = useTableRequest(SysAdminService.queryList, {
     onError: error => tips.error(error.message)
   });
 
   /**
    * 添加/编辑保存
-   *
    * @param record
    */
   const submit = useMemoizedFn(async (result: SaveOrUpdateModel<SysAdminModel>) => {

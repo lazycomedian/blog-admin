@@ -1,10 +1,11 @@
-import { EMPTY_PLACE_HOLDER, tableColumnWidth } from "@/constants/common";
+import { EMPTY_PLACE_HOLDER } from "@/constants";
 import { ColumnType } from "antd/es/table";
 import { useMemo } from "react";
 
 interface ColumnsOptions {
   withIndex?: boolean;
   align?: "left" | "center" | "right";
+  expandable?: boolean;
 }
 
 interface IColumnType<R> extends Omit<ColumnType<R>, "key"> {
@@ -14,7 +15,7 @@ interface IColumnType<R> extends Omit<ColumnType<R>, "key"> {
 type UseTableColumns = <R = any>(columns?: Array<IColumnType<R>>, options?: ColumnsOptions) => Array<ColumnType<R>>;
 
 export const useTableColumns: UseTableColumns = (columns = [], options) => {
-  const { align, withIndex } = options || {};
+  const { align, withIndex, expandable } = options || {};
 
   return useMemo(() => {
     const finalColumns = columns.map(item => {
@@ -33,9 +34,15 @@ export const useTableColumns: UseTableColumns = (columns = [], options) => {
     });
 
     if (withIndex) finalColumns.unshift({ title: "序号", align, render: (v, r, i) => `${i + 1}`, width: 80 });
+    if (expandable) finalColumns.unshift({ title: "", width: 1, className: "expandable" });
 
     return finalColumns;
   }, [columns, align, withIndex]);
+};
+
+export const tableColumnWidth: Record<string, number> = {
+  TIME: 140,
+  STATUS: 90
 };
 
 const setDefaultWidth = (item: IColumnType<any>) => {
