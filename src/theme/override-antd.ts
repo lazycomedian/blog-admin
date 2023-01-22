@@ -78,7 +78,25 @@ export const overrideAntdCss = css`
   }
 
   /**  <---- modal style   */
-  .ant-modal {
+  .ant-modal.ant-modal-confirm {
+    .ant-modal-content {
+      padding: 32px 32px 24px;
+      .ant-modal-confirm-btns {
+        margin-top: 18px;
+      }
+    }
+    .ant-modal-confirm-title {
+      color: #17233d;
+      font-weight: 500;
+    }
+    .ant-modal-confirm-content {
+      color: #515a6e;
+    }
+    .ant-btn-text {
+      color: #515a6e;
+    }
+  }
+  .ant-modal:not(.ant-modal-confirm) {
     .ant-modal-content {
       border-radius: 0 0 8px 8px;
       padding: 0;

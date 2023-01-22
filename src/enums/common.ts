@@ -16,14 +16,16 @@ export enum ModalTypeEnum {
 
 /** 本地存储Key */
 export enum StorageKeyEnum {
-  token = "token",
-  menu = "menu"
+  TOKEN = "token",
+  MENU = "menu"
 }
 
 /** 固定路由URL配置 */
 export enum CommonRouteEnum {
-  /** 登录页路由 */
+  /** 登录页 */
   LOGIN = "/login",
-  /** 主页路由 */
-  HOME = "/home"
+  /** 主页 */
+  HOME = "/home",
+  /** 用户中心 */
+  USER_CENTER = "/user_center"
 }

@@ -1,9 +1,10 @@
+import type { SysMenuModel } from "@/model/settings";
+import type { UseColumns } from "@/typings/common";
+
 import { useTableColumns } from "@/hooks";
-import { SysMenuModel } from "@/model/settings";
 import { SysMenuService } from "@/service";
-import { UseColumns } from "@/typings/biz";
 import { tips } from "@/utils";
-import { getAntdIconNode } from "@/utils/biz";
+import { getAntdIconNode } from "@/utils/common";
 import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
 import { concatString } from "@sentimental/toolkit";
 import { useMemoizedFn } from "ahooks";

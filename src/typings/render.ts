@@ -1,6 +1,5 @@
-import { CommonStatusEnum } from "@/enums";
+import type { CommonStatusEnum } from "@/enums";
 import type { PopconfirmProps } from "antd";
-import type { MenuItemType } from "antd/es/menu/hooks/useItems";
 import type { ColumnType } from "antd/es/table";
 import type { LinkProps } from "antd/es/typography/Link";
 
@@ -8,7 +7,7 @@ import type { LinkProps } from "antd/es/typography/Link";
 export type ColumnRender<RecordType = any> = ColumnType<RecordType>["render"];
 
 /** 表格列点击方法 */
-export type ColumnClick<RecordType> = (...args: Parameters<Exclude<ColumnRender<RecordType>, undefined>>) => void;
+type ColumnClick<RecordType> = (...args: Parameters<Exclude<ColumnRender<RecordType>, undefined>>) => void;
 
 /** 获取状态列render方法 */
 export type GetStatusRender = <RecordType = any>(props: {
@@ -51,28 +50,4 @@ export interface UseColumnsProps<RecordType = any> {
    * 刷新的方法
    */
   reload(): void;
-}
-
-/** 通用表格列hook方法 */
-export type UseColumns<RecordType = any> = (props: UseColumnsProps<RecordType>) => ColumnType<RecordType>[];
-
-/** Antd菜单项 */
-export interface AntdMenuItem extends Pick<MenuItemType, "label" | "icon" | "key"> {
-  children?: AntdMenuItem[];
-}
-
-/** Antd Icon风格 */
-export interface AntdIconStyle {
-  /**
-   * 风格分类名
-   */
-  title: string;
-  /**
-   * 风格关键字
-   */
-  key: string;
-  /**
-   * icon名称集合
-   */
-  iconNames: string[];
 }

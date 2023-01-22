@@ -1,6 +1,6 @@
 import { CommonStatusEnum } from "@/enums";
 import { logger, tips } from "@/utils";
-import { getCommonStatusLabel } from "@/utils/biz";
+import { getCommonStatusLabel } from "@/utils/common";
 import { useRequest } from "ahooks";
 import { Switch } from "antd";
 import React, { memo } from "react";

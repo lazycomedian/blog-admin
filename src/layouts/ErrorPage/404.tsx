@@ -1,5 +1,6 @@
 import notFoundSvg from "@/assets/svgs/404.svg";
 import { CommonRouteEnum } from "@/enums";
+import { useAppTitle } from "@/hooks";
 import { Button } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,8 @@ import styled from "styled-components";
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
+
+  useAppTitle("404");
 
   return (
     <Wrapper>

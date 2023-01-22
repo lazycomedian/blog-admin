@@ -20,7 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "ahooks": "^3.7.2",
-    "antd": "^5.0.2",
+    "antd": "^5.1.6",
     "classnames": "^2.3.2",
     "mobx": "^6.6.2",
     "react": "^18.2.0",
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@ant-design/icons": "^4.7.0",
     "@sentimental/request": "^0.1.1",
+    "@sentimental/toolkit": "^0.1.4",
     "@types/lodash": "^4.14.186",
     "@types/node": "^18.7.21",
     "@types/react": "^18.0.21",

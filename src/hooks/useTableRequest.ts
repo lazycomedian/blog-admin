@@ -21,9 +21,7 @@ export const useTableRequest = <T extends ServiceQuery = ServiceQuery>(
     ...restOptions
   });
 
-  /**
-   * 分页配置
-   */
+  /** 分页配置 */
   const paginationConfig = useMemo<TablePaginationConfig>(() => {
     return {
       ...pagination,

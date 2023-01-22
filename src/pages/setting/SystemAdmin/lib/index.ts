@@ -1,7 +1,8 @@
+import type { SysAdminModel } from "@/model/settings";
+import type { UseColumns } from "@/typings/common";
+
 import { useTableColumns } from "@/hooks";
-import { SysAdminModel } from "@/model/settings";
 import { SysAdminService } from "@/service";
-import { UseColumns } from "@/typings/biz";
 import { tips } from "@/utils";
 import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
 import { useMemoizedFn } from "ahooks";
@@ -16,8 +17,8 @@ export const useColumns: UseColumns<SysAdminModel> = ({ reload, onEdit }) => {
       await SysAdminService.remove(id);
       tips.success("删除成功");
       reload();
-    } catch (error) {
-      tips.error("删除失败");
+    } catch (error: any) {
+      tips.error(error?.message || "删除失败");
     }
   });
 

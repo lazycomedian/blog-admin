@@ -1,5 +1,5 @@
 import { ModalTypeEnum } from "@/enums";
-import { getModalTypeLabel } from "@/utils/biz";
+import { getModalTypeLabel } from "@/utils/common";
 import { useBoolean } from "ahooks";
 import { Modal } from "antd";
 import { forwardRef, memo, useImperativeHandle, useMemo, useRef, useState } from "react";

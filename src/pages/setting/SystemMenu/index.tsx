@@ -1,20 +1,23 @@
 import AddButton from "@/components/AddButton";
+import BasicSearch from "@/components/BasicSearch";
 import FormModal, { useFormModalRef } from "@/components/FormModal";
 import IconPicker from "@/components/IconPicker";
+import StatusFormItem from "@/components/StatusFormItem";
 import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import { useTableExpand } from "@/hooks";
 import { useModalRef } from "@/hooks/modal";
+import PageCard from "@/layouts/PageCard";
+import PageHeader from "@/layouts/PageHeader";
 import { SaveOrUpdateModel } from "@/model/common";
 import { SysMenuModel } from "@/model/settings";
 import { SysMenuService } from "@/service";
 import { useStore } from "@/store";
 import { tips } from "@/utils";
-import { getAntdIconNode, getModalTypeLabel } from "@/utils/biz";
-import { StatusFormItem, StatusQueryFormItem } from "@/utils/render";
+import { getAntdIconNode, getModalTypeLabel } from "@/utils/common";
 import { CrownFilled } from "@ant-design/icons";
 import { concatString } from "@sentimental/toolkit";
 import { useMemoizedFn, useRequest } from "ahooks";
-import { Form, Input, InputNumber, Space, Table, Typography } from "antd";
+import { Form, Input, InputNumber, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useColumns } from "./lib";
 
@@ -82,20 +85,11 @@ const SystemMenu: React.FC = props => {
 
   return (
     <React.Fragment>
-      <Space size="large" direction="vertical">
-        {/* 查询 */}
-        <Form layout="inline">
-          <Space size="large">
-            <StatusQueryFormItem onChange={status => run({ status })} />
-            <Form.Item label="搜索" name="name">
-              <Input.Search enterButton allowClear placeholder="请输入菜单名称" onSearch={content => run({ content })} />
-            </Form.Item>
-          </Space>
-        </Form>
-
+      <PageHeader />
+      <PageCard>
+        <BasicSearch placeholder="请输入菜单名称" onChange={status => run({ status })} onSearch={content => run({ content })} />
         <AddButton onClick={() => formModalRef.show()}>添加菜单</AddButton>
 
-        {/* 表格 */}
         <Table
           rowKey="id"
           columns={columns}
@@ -105,9 +99,9 @@ const SystemMenu: React.FC = props => {
           expandable={tableExpand}
           scroll={{ x: true }}
         />
-      </Space>
+      </PageCard>
 
-      {/* 弹窗 */}
+      {/* modal */}
       <FormModal
         ref={formModalRef}
         title="菜单"
@@ -121,16 +115,16 @@ const SystemMenu: React.FC = props => {
         <Form.Item
           label="图标"
           name="icon"
-          rules={[
-            { required: true, message: "请输入或选择图标名称" },
-            {
-              message: "请输入或选择正确的图标",
-              validator: async (rule, value) => {
-                if (!value) return Promise.resolve();
-                if (!getAntdIconNode(currentIconName)) return Promise.reject();
-              }
-            }
-          ]}
+          // rules={[
+          //   { required: true, message: "请输入或选择图标名称" },
+          //   {
+          //     message: "请输入或选择正确的图标",
+          //     validator: async (rule, value) => {
+          //       if (!value) return Promise.resolve();
+          //       if (!getAntdIconNode(currentIconName)) return Promise.reject();
+          //     }
+          //   }
+          // ]}
         >
           <Input
             placeholder="请输入图标名称，点击右侧可选择"
@@ -140,7 +134,7 @@ const SystemMenu: React.FC = props => {
             suffix={<CrownFilled className="cursor-pointer" onClick={() => iconPickerRef.current?.show()} />}
           />
         </Form.Item>
-        <Form.Item label="页面路由" name="path">
+        <Form.Item label="页面路由" name="path" rules={[{ required: true, message: "请输入页面路由" }]}>
           <Input
             allowClear
             addonBefore={

@@ -1,7 +1,9 @@
 import type { UserMenuModel } from "@/model/settings";
-import type { AntdIconStyle, AntdMenuItem } from "@/typings/biz";
+import type { AntdIconStyle, AntdMenuItem, IconfontType } from "@/typings/common";
 import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 
+import Iconfont from "@/components/Iconfont";
+import { iconfontTypes } from "@/constants";
 import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import * as antdIcons from "@ant-design/icons";
 import { concatString } from "@sentimental/toolkit";
@@ -28,8 +30,13 @@ export function getAllPagesMap(): Map<string, React.FC | undefined> {
  * @param props
  */
 export function getAntdIconNode(iconName: string = "", props?: AntdIconProps): React.ReactNode {
-  const icon = Reflect.get(antdIcons, iconName);
-  return icon ? React.createElement(icon, props) : null;
+  if (iconName in antdIcons) {
+    const icon = Reflect.get(antdIcons, iconName);
+    return icon ? React.createElement(icon, props) : null;
+  }
+  if (iconfontTypes.includes(<IconfontType>iconName)) {
+    return React.createElement(Iconfont, { type: <IconfontType>iconName, style: props?.style });
+  }
 }
 
 /**
@@ -53,6 +60,7 @@ export function getAntdIconNames(iconName: string = "") {
       });
     }
   } finally {
+    iconStyles.push({ key: "Iconfont", title: "Iconfont", iconNames: <string[]>(<unknown>iconfontTypes) });
     return iconStyles.filter(item => item.iconNames.length);
   }
 }
@@ -106,4 +114,17 @@ export function getUserMenuTree(menu: UserMenuModel[]): AntdMenuItem[] {
       icon: getAntdIconNode(item.icon)
     };
   });
+}
+
+/**
+ * 通过路径组装完整的路径集合
+ * @param path
+ */
+export function getOpenKeysByPath(path: string | undefined): string[] {
+  if (!path) return [];
+  const pathList = path.split("/").slice(0, -1).filter(Boolean);
+  return pathList.reduce<string[]>((prev, cur) => {
+    prev.push(prev.length === 0 ? "/" + cur : prev.at(-1) + "/" + cur);
+    return prev;
+  }, []);
 }

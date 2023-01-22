@@ -1,15 +1,18 @@
 import AddButton from "@/components/AddButton";
+import BasicSearch from "@/components/BasicSearch";
 import FormModal, { useFormModalRef } from "@/components/FormModal";
+import StatusFormItem from "@/components/StatusFormItem";
 import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import { useTableRequest } from "@/hooks";
+import PageCard from "@/layouts/PageCard";
+import PageHeader from "@/layouts/PageHeader";
 import { SaveOrUpdateModel } from "@/model/common";
 import { SysRoleModel } from "@/model/settings";
 import { SysRoleService } from "@/service";
 import { tips } from "@/utils";
-import { getModalTypeLabel } from "@/utils/biz";
-import { StatusFormItem, StatusQueryFormItem } from "@/utils/render";
+import { getModalTypeLabel } from "@/utils/common";
 import { useMemoizedFn } from "ahooks";
-import { Form, Input, Space, Table } from "antd";
+import { Form, Input, Table } from "antd";
 import React, { useState } from "react";
 import { useColumns } from "./lib";
 
@@ -54,23 +57,20 @@ const SystemRole: React.FC = () => {
   });
 
   return (
-    <Space size="large" direction="vertical">
-      {/* 查询 */}
-      <Form layout="inline">
-        <Space size="large">
-          <StatusQueryFormItem onChange={status => getList({ status })} />
-          <Form.Item label="搜索" name="roleName">
-            <Input.Search enterButton allowClear placeholder="请输入角色名称" onSearch={content => getList({ content })} />
-          </Form.Item>
-        </Space>
-      </Form>
+    <React.Fragment>
+      <PageHeader />
+      <PageCard>
+        <BasicSearch
+          placeholder="请输入角色名称"
+          onChange={status => getList({ status })}
+          onSearch={content => getList({ content })}
+        />
+        <AddButton onClick={() => formModalRef.show(ModalTypeEnum.ADD)}>添加角色</AddButton>
 
-      <AddButton onClick={() => formModalRef.show(ModalTypeEnum.ADD)}>添加角色</AddButton>
+        <Table rowKey="id" columns={columns} {...tableProps} scroll={{ x: true }} />
+      </PageCard>
 
-      {/* 表格 */}
-      <Table rowKey="id" columns={columns} {...tableProps} scroll={{ x: true }} />
-
-      {/* 弹窗 */}
+      {/* modal */}
       <FormModal
         ref={formModalRef}
         title="角色"
@@ -83,7 +83,7 @@ const SystemRole: React.FC = () => {
         </Form.Item>
         <StatusFormItem />
       </FormModal>
-    </Space>
+    </React.Fragment>
   );
 };
 

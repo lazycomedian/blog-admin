@@ -1,12 +1,18 @@
 import { createGlobalStyle } from "styled-components";
 import { overrideToken } from "./AntdConfigProvider";
+import { commonClassName } from "./common";
 import { overrideAntdCss } from "./override-antd";
 
 export const GlobalStyle = createGlobalStyle`
+  body {
+    background: #f5f7f9;
+  }
+
   #root {
     height: 100%;
     width: 100%;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei;
+    background: #f5f7f9;
   }
 
   #nprogress .bar{
@@ -19,10 +25,6 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 20px;
     margin: 10px;
     color: ${overrideToken.Button?.colorPrimary || "unset"};
-  }
-
-  .ant-form-item .i-query-select {
-    width: 214px !important;
   }
 
   .ant-table .ant-table-row>td.expandable{
@@ -38,5 +40,6 @@ export const GlobalStyle = createGlobalStyle`
     white-space: nowrap;
   }
 
+  ${commonClassName}
   ${overrideAntdCss}
 `;

@@ -37,7 +37,7 @@ export class BizRequest extends Request<BizRequestConfig, IResponse> {
 
   protected override onFulfilledResponseInterceptor(response: RequestResponse<BizRequestConfig, IResponse>) {
     const { config, data } = response;
-    if (data.code !== config.code) return Promise.reject(data.message);
+    if (data.code !== config.code) return Promise.reject(data);
     return data.data;
   }
 }

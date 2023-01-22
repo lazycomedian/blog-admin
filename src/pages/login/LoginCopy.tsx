@@ -17,7 +17,7 @@ const Login: React.FC = props => {
     onError: e => tips.error(e.message),
     onSuccess: data => {
       tips.success("登录成功");
-      storage.setItem(StorageKeyEnum.token, data.token);
+      storage.setItem(StorageKeyEnum.TOKEN, data.token);
       navigate("/home");
     }
   });

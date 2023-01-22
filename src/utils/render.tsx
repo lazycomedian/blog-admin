@@ -1,11 +1,10 @@
+import type { ColumnRender, GetOperationRender, GetStatusRender } from "@/typings/render";
+
 import StatusSwitch from "@/components/StatusSwitch";
 import { EMPTY_PLACE_HOLDER, FORMAT } from "@/constants";
-import { CommonStatusEnum } from "@/enums";
-import { ColumnRender, GetOperationRender, GetStatusRender } from "@/typings/biz";
-import { Divider, Form, Popconfirm, Radio, Select, SelectProps, Typography } from "antd";
+import { Divider, Popconfirm, Typography } from "antd";
 import React from "react";
 import { dayjs } from ".";
-import { getCommonStatusLabel } from "./biz";
 
 /**
  * 通用时间渲染方法，用于table表格列配置
@@ -55,34 +54,3 @@ export const getOperationRender: GetOperationRender = (options = []) => {
     </React.Fragment>
   );
 };
-
-/**
- * 用于添加/修改Form的状态表单项组件
- */
-export const StatusFormItem: React.FC = () => (
-  <Form.Item label="是否开启" name="status">
-    <Radio.Group>
-      <Radio value={CommonStatusEnum.AVAILABLE}>{getCommonStatusLabel(CommonStatusEnum.AVAILABLE)}</Radio>
-      <Radio value={CommonStatusEnum.DISABLED}>{getCommonStatusLabel(CommonStatusEnum.DISABLED)}</Radio>
-    </Radio.Group>
-  </Form.Item>
-);
-
-/**
- * 用于查询Form的状态表单组件
- * @param onChange
- */
-export const StatusQueryFormItem: React.FC<Pick<SelectProps, "onChange">> = ({ onChange }) => (
-  <Form.Item label="状态" name="status">
-    <Select
-      options={[
-        { label: getCommonStatusLabel(CommonStatusEnum.AVAILABLE), value: CommonStatusEnum.AVAILABLE },
-        { label: getCommonStatusLabel(CommonStatusEnum.DISABLED), value: CommonStatusEnum.DISABLED }
-      ]}
-      placeholder="请选择"
-      allowClear
-      className="i-query-select"
-      onChange={onChange}
-    />
-  </Form.Item>
-);

@@ -1,5 +1,5 @@
 import { withModal } from "@/hooks/modal";
-import { getAntdIconNames, getAntdIconNode } from "@/utils/biz";
+import { getAntdIconNames, getAntdIconNode } from "@/utils/common";
 import { SearchOutlined } from "@ant-design/icons";
 import { Col, Divider, Empty, Input, Row } from "antd";
 import React, { useState } from "react";
@@ -63,6 +63,8 @@ const Wrapper = styled.div`
   .icon_container {
     max-height: 500px;
     overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 10px;
     ::-webkit-scrollbar {
       display: none;
     }
@@ -82,8 +84,8 @@ const Wrapper = styled.div`
 
         :hover {
           background-color: #5c6b77;
-          color: #fff;
-          font-size: 36px;
+          color: #fff !important;
+          transform: scale(1.2);
         }
       }
     }
