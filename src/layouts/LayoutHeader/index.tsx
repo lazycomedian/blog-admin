@@ -80,7 +80,7 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = ({ collapsed, onTriggerClick, 
             {React.createElement(isFullscreen ? CompressOutlined : ExpandOutlined)}
           </ItemButton>
           {/* 登录用户 */}
-          <Dropdown menu={dropdownMenu}>
+          <Dropdown menu={dropdownMenu} trigger={["click"]}>
             <ItemButton>
               <span className="login_user">admin</span>
             </ItemButton>

@@ -13,11 +13,11 @@ import { SysMenuModel } from "@/model/settings";
 import { SysMenuService } from "@/service";
 import { useStore } from "@/store";
 import { tips } from "@/utils";
-import { getAntdIconNode, getModalTypeLabel } from "@/utils/common";
+import { allPagesMap, getAntdIconNode, getModalTypeLabel } from "@/utils/common";
 import { CrownFilled } from "@ant-design/icons";
 import { concatString } from "@sentimental/toolkit";
 import { useMemoizedFn, useRequest } from "ahooks";
-import { Form, Input, InputNumber, Table, Typography } from "antd";
+import { Form, Input, InputNumber, Select, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useColumns } from "./lib";
 
@@ -34,9 +34,7 @@ const SystemMenu: React.FC = props => {
   // 图标选择控制器
   const iconPickerRef = useModalRef();
 
-  const { run, loading, data } = useRequest(SysMenuService.findAll, {
-    onError: error => tips.error(error.message)
-  });
+  const { run, loading, data = [] } = useRequest(SysMenuService.findAll, { onError: error => tips.error(error.message) });
 
   const columns = useColumns({
     reload: () => {
@@ -48,7 +46,8 @@ const SystemMenu: React.FC = props => {
       formModalRef.show(ModalTypeEnum.ADD, {
         pid: record.id,
         status: CommonStatusEnum.AVAILABLE,
-        prefixPath: concatString(record.prefixPath, record.path)
+        prefixPath: concatString(record.prefixPath, record.path),
+        sort: (record.children?.length || 0) + 1
       });
     }
   });
@@ -88,7 +87,7 @@ const SystemMenu: React.FC = props => {
       <PageHeader />
       <PageCard>
         <BasicSearch placeholder="请输入菜单名称" onChange={status => run({ status })} onSearch={content => run({ content })} />
-        <AddButton onClick={() => formModalRef.show()}>添加菜单</AddButton>
+        <AddButton onClick={() => formModalRef.show(ModalTypeEnum.ADD, { sort: data.length + 1 })}>添加菜单</AddButton>
 
         <Table
           rowKey="id"
@@ -151,7 +150,12 @@ const SystemMenu: React.FC = props => {
           />
         </Form.Item>
         <Form.Item label="组件路径" name="component">
-          <Input allowClear placeholder="请输入组件路径" />
+          <Select
+            allowClear
+            showSearch
+            placeholder="请选择组件路径"
+            options={Array.from(allPagesMap.keys(), path => ({ label: path, value: path }))}
+          />
         </Form.Item>
         <Form.Item label="排序" name="sort" rules={[{ required: true, message: "请输入排序" }]}>
           <InputNumber placeholder="请输入排序" min={1} />

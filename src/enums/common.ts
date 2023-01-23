@@ -26,7 +26,7 @@ export enum CommonRouteEnum {
   /** 登录页 */
   LOGIN = "/login",
   /** 主页 */
-  HOME = "/",
+  HOME = "/home",
   /** 用户中心 */
   USER_CENTER = "/user_center"
 }

@@ -37,11 +37,11 @@ export const useColumns: UseColumns<SysMenuModel> = ({ reload, onEdit, onAdd }) 
       title: "操作",
       fixed: "right",
       align: "center",
-      render: getOperationRender([
-        { children: "添加子菜单", onClick: onAdd },
+      render: getOperationRender(record => [
+        { children: "添加子菜单", onClick: onAdd, disabled: !!record.component },
         { children: "编辑", onClick: onEdit },
         {
-          popconfirmProps: { title: "确定要删除该管理员吗？", onConfirm: (v, r) => remove(r.id) },
+          popconfirmProps: { title: "确定要删除该菜单吗？", onConfirm: (v, r) => remove(r.id) },
           children: "删除"
         }
       ])

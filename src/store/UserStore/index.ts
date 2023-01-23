@@ -3,13 +3,11 @@ import { StorageKeyEnum } from "@/enums";
 import { UserMenuModel } from "@/model/settings";
 import { SysMenuService } from "@/service";
 import { logger, storage } from "@/utils";
-import { getAllPagesMap } from "@/utils/common";
+import { allPagesMap } from "@/utils/common";
 import { concatString } from "@sentimental/toolkit";
 import { makeAutoObservable } from "mobx";
 import React from "react";
 import { RouteObject } from "react-router-dom";
-
-const pagesMap = getAllPagesMap();
 
 export class UserStore {
   constructor() {
@@ -85,7 +83,7 @@ export class UserStore {
   private getRouteObjectList(menu: UserMenuModel[]): RouteObject[] {
     return menu.map(item => {
       let element: React.ReactNode;
-      const component = item.component ? pagesMap.get(item.component) : undefined;
+      const component = item.component ? allPagesMap.get(item.component) : undefined;
       if (component) {
         element = React.createElement(
           React.Suspense,

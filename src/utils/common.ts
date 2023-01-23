@@ -24,6 +24,8 @@ export function getAllPagesMap(): Map<string, React.FC | undefined> {
   return pagesMap;
 }
 
+export const allPagesMap = getAllPagesMap();
+
 /**
  * 根据icon图标名称获取图标节点
  * @param iconName 图标名称

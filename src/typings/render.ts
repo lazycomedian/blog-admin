@@ -23,7 +23,9 @@ interface ROptions<RecordType> extends Omit<LinkProps, "onClick"> {
 }
 
 /** 获取操作列render方法 */
-export type GetOperationRender = <RecordType = any>(options: ROptions<RecordType>[]) => ColumnRender<RecordType>;
+export type GetOperationRender = <RecordType = any>(
+  options: ROptions<RecordType>[] | ((record: RecordType) => ROptions<RecordType>[])
+) => ColumnRender<RecordType>;
 
 /** 通用表格列hook方法参数 */
 export interface UseColumnsProps<RecordType = any> {

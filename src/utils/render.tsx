@@ -2,6 +2,7 @@ import type { ColumnRender, GetOperationRender, GetStatusRender } from "@/typing
 
 import StatusSwitch from "@/components/StatusSwitch";
 import { EMPTY_PLACE_HOLDER, FORMAT } from "@/constants";
+import { isFunction } from "@sentimental/toolkit";
 import { Divider, Popconfirm, Typography } from "antd";
 import React from "react";
 import { dayjs } from ".";
@@ -32,25 +33,28 @@ export const getStatusRender: GetStatusRender = ({ service, onChange, rowKey }) 
  * @param options 配置项
  */
 export const getOperationRender: GetOperationRender = (options = []) => {
-  return (value, record, index) => (
-    <React.Fragment>
-      {options.map(({ onClick, popconfirmProps, children, ...props }, i) => {
-        return (
-          <React.Fragment key={i}>
-            {i > 0 && <Divider type="vertical" />}
-            <Popconfirm
-              open={popconfirmProps ? undefined : false}
-              title="确定要删除吗？"
-              {...popconfirmProps}
-              onConfirm={() => popconfirmProps?.onConfirm && popconfirmProps.onConfirm(value, record, index)}
-            >
-              <Typography.Link {...props} onClick={() => onClick && onClick(value, record, index)}>
-                {children}
-              </Typography.Link>
-            </Popconfirm>
-          </React.Fragment>
-        );
-      })}
-    </React.Fragment>
-  );
+  return (value, record, index) => {
+    const rOptions = isFunction(options) ? options(record) : options;
+    return (
+      <React.Fragment>
+        {rOptions.map(({ onClick, popconfirmProps, children, ...props }, i) => {
+          return (
+            <React.Fragment key={i}>
+              {i > 0 && <Divider type="vertical" />}
+              <Popconfirm
+                open={popconfirmProps ? undefined : false}
+                title="确定要删除吗？"
+                {...popconfirmProps}
+                onConfirm={() => popconfirmProps?.onConfirm && popconfirmProps.onConfirm(value, record, index)}
+              >
+                <Typography.Link {...props} onClick={() => onClick && onClick(value, record, index)}>
+                  {children}
+                </Typography.Link>
+              </Popconfirm>
+            </React.Fragment>
+          );
+        })}
+      </React.Fragment>
+    );
+  };
 };

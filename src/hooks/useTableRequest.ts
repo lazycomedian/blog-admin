@@ -36,7 +36,7 @@ export const useTableRequest = <T extends ServiceQuery = ServiceQuery>(
 
   return {
     ...result,
-    run: (query?: T) => {
+    run(query?: T) {
       run({
         ...query,
         current: query?.current ?? defaultCurrent,
