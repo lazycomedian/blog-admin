@@ -35,7 +35,7 @@ export interface SysMenuModel extends BaseModel {
   /**
    * 路由
    */
-  path?: string;
+  path: string;
   /**
    * 父级页面路由
    */
@@ -63,10 +63,6 @@ export interface SysMenuModel extends BaseModel {
 }
 
 export interface UserMenuModel extends BaseModel, Pick<SysMenuModel, "name" | "path" | "component" | "icon" | "prefixPath"> {
-  /**
-   * 完整路由路径
-   */
-  fullPath?: string;
   /**
    * 用户子菜单列表
    */

@@ -15,7 +15,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ className }) => {
 
   const openMenus = useMemo(() => {
     return [...getOpenKeysByPath(pathname), pathname]
-      .map(key => userStore.flattenUserMenu.find(item => item.fullPath === key)!)
+      .map(key => userStore.flattenUserMenu.find(item => item.path === key)!)
       .filter(Boolean);
   }, [pathname, userStore.flattenUserMenu]);
 
@@ -25,9 +25,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ className }) => {
         <React.Fragment key={item.id}>
           <div className="breadcrumb-separator">/</div>
           {item.icon && <div className="breadcrumb-icon">{getAntdIconNode(item.icon)}</div>}
-          <div className={classNames("breadcrumb-item", { "breadcrumb-item-active": item.fullPath === pathname })}>
-            {item.name}
-          </div>
+          <div className={classNames("breadcrumb-item", { "breadcrumb-item-active": item.path === pathname })}>{item.name}</div>
         </React.Fragment>
       ))}
     </Wrapper>

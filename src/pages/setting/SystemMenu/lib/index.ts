@@ -6,7 +6,6 @@ import { SysMenuService } from "@/service";
 import { tips } from "@/utils";
 import { getAntdIconNode } from "@/utils/common";
 import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
-import { concatString } from "@sentimental/toolkit";
 import { useMemoizedFn } from "ahooks";
 import React from "react";
 
@@ -28,7 +27,7 @@ export const useColumns: UseColumns<SysMenuModel> = ({ reload, onEdit, onAdd }) 
   return useTableColumns<SysMenuModel>([
     { title: React.createElement("div", { style: { marginLeft: 20 } }, "菜单名称"), key: "name", width: 130 },
     { title: "图标", key: "icon", width: 70, render: icon => getAntdIconNode(icon, { style: { fontSize: 18 } }) },
-    { title: "页面路由", key: "path", width: 180, ellipsis: true, render: (v, r) => concatString(r.prefixPath, v) },
+    { title: "页面路由", key: "path", width: 180, ellipsis: true },
     { title: "组件路径", key: "component", width: 160, render: v => v ?? "目录" },
     { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysMenuService.switch }) },
     { title: "排序", key: "sort" },

@@ -1,4 +1,4 @@
-import { AxiosError, Request, RequestConfig, RequestResponse } from "@sentimental/request";
+import { AxiosError, NProgressOptions, Request, RequestConfig, RequestResponse } from "@sentimental/request";
 import { notice } from ".";
 
 interface BizRequestConfig extends RequestConfig {
@@ -15,6 +15,16 @@ interface BizRequestConfig extends RequestConfig {
 }
 
 export class BizRequest extends Request<BizRequestConfig, IResponse> {
+  protected override nProgressConfigure(): Partial<NProgressOptions> {
+    return {
+      easing: "ease",
+      speed: 500,
+      showSpinner: false,
+      trickleSpeed: 200,
+      minimum: 0.3
+    };
+  }
+
   protected override onRejectedResponseInterceptor(error: AxiosError) {
     // 请求超时单独判断，请求超时没有 response
     if (error.code === "ECONNABORTED") {

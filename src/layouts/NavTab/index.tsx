@@ -6,7 +6,7 @@ import { useStore } from "@/store";
 import { ArrowLeftOutlined, ArrowRightOutlined, CloseCircleFilled, CloseOutlined } from "@ant-design/icons";
 import { useLocalStorage } from "@sentimental/hooks";
 import { isNumber } from "@sentimental/toolkit";
-import { useMemoizedFn, useScroll, useSize } from "ahooks";
+import { useEventListener, useMemoizedFn, useScroll, useSize } from "ahooks";
 import { Dropdown, MenuProps } from "antd";
 import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -49,13 +49,12 @@ const NavTab: React.FC<NavTabProps> = ({ left = 0 }) => {
       // 根据路由变化添加tab
       currentRouteMenu && setData(prev => prev.concat([currentRouteMenu]));
     }
-    showFullActiveTab();
   }, [currentRouteMenu]);
 
   useEffect(() => {
-    // 让tab中至少存在一个主页标签
+    // 确保tab中至少存在一个主页标签
     if (data.length === 0) {
-      const homePage = userStore.flattenUserMenu.find(item => item.fullPath === CommonRouteEnum.HOME);
+      const homePage = userStore.userMenu.find(item => item.path === CommonRouteEnum.HOME);
       if (homePage) {
         navigate(CommonRouteEnum.HOME);
         setData([homePage]);
@@ -63,9 +62,43 @@ const NavTab: React.FC<NavTabProps> = ({ left = 0 }) => {
     }
   }, [data]);
 
+  // 完整展示当前选中tab标签
+  useEffect(() => {
+    const { offsetLeft, offsetWidth } = activeTabRef.current || {};
+    const scrollWidth = scrollRef.current?.offsetWidth;
+
+    if (isNumber(offsetLeft) && isNumber(offsetWidth) && typeof scrollWidth === "number") {
+      const willPrevMove = scrollDistance - offsetLeft;
+
+      if (willPrevMove > 0) {
+        // 向左滚动滚动
+        setScrollDistance(prev => (prev - willPrevMove < 0 ? 0 : prev - willPrevMove));
+      } else {
+        if (scrollDistance > maxDistance) {
+          // 超过最大滚动距离时位置跟随最大滚动距离变化
+          setScrollDistance(maxDistance);
+        } else {
+          // 计算当前点击元素存在视图之外的宽度
+          const willNextMove = offsetLeft - scrollDistance + offsetWidth - scrollWidth;
+          // 向右滚动滚动
+          willNextMove > 0 && setScrollDistance(prev => prev + willNextMove);
+        }
+      }
+    }
+  }, [currentRouteMenu, data, scrollSize?.width]);
+
   useEffect(() => {
     if (maxDistance <= 0) setScrollDistance(0);
   }, [maxDistance]);
+
+  useEventListener(
+    "wheel",
+    (e: WheelEvent) => {
+      e.preventDefault();
+      if (e.deltaY !== 0 || e.deltaX !== 0) handleScroll(e.deltaY > 0 || e.deltaX > 0 ? "next" : "prev");
+    },
+    { target: scrollRef }
+  );
 
   /**
    * 处理tab标签的整页滚动
@@ -84,33 +117,6 @@ const NavTab: React.FC<NavTabProps> = ({ left = 0 }) => {
     }
   });
 
-  const mountTimer = useRef<NodeJS.Timeout>();
-
-  /**
-   * 完整展示当前选中tab标签
-   */
-  const showFullActiveTab = useMemoizedFn(() => {
-    clearTimeout(mountTimer.current);
-    mountTimer.current = setTimeout(() => {
-      const { offsetLeft, offsetWidth } = activeTabRef.current || {};
-      const scrollWidth = scrollRef.current?.offsetWidth;
-      if (isNumber(offsetLeft) && isNumber(offsetWidth) && typeof scrollWidth === "number") {
-        const scrollLeft = offsetLeft - scrollDistance;
-        // 计算当前点击元素存在视图之外的宽度
-        const willNextMove = scrollLeft + offsetWidth - scrollWidth;
-
-        if (willNextMove > 0) {
-          // 正向滚动
-          setScrollDistance(prev => prev + willNextMove);
-        } else {
-          // 反向滚动
-          const willPrevMove = scrollDistance - offsetLeft;
-          if (willPrevMove > 0) setScrollDistance(prev => (prev - willPrevMove < 0 ? 0 : prev - willPrevMove));
-        }
-      }
-    }, 100);
-  });
-
   const pageScroll = useScroll(document);
 
   const containerTop = useMemo<number>(() => {
@@ -120,11 +126,11 @@ const NavTab: React.FC<NavTabProps> = ({ left = 0 }) => {
 
   const dropdownMenu = useMemo<MenuProps>(() => {
     return {
-      onClick: e => {
-        if (data.length === 1 && data[0].fullPath === CommonRouteEnum.HOME) return;
+      onClick: ({ key }) => {
+        if (data.length === 1 && data[0].path === CommonRouteEnum.HOME) return;
         const index = data.findIndex(item => item.id === currentRouteMenu?.id);
         if (index === -1) return;
-        switch (e.key) {
+        switch (key) {
           case "left":
             setData(prev => prev.slice(index));
             break;
@@ -165,14 +171,14 @@ const NavTab: React.FC<NavTabProps> = ({ left = 0 }) => {
                     key={index}
                     ref={activeTabRef}
                     active={isActive}
-                    showClose={!(data.length === 1 && item.fullPath === CommonRouteEnum.HOME)}
-                    onClick={() => item.fullPath && item.fullPath !== currentRouteMenu?.fullPath && navigate(item.fullPath)}
+                    showClose={!(data.length === 1 && item.path === CommonRouteEnum.HOME)}
+                    onClick={() => navigate(item.path)}
                     onClose={() => {
                       if (isActive) {
-                        const nextPath = data[index + 1]?.fullPath;
+                        const nextPath = data[index + 1]?.path;
                         if (nextPath) navigate(nextPath);
                         else if (index - 1 >= 0) {
-                          const prevPath = data[index - 1]?.fullPath;
+                          const prevPath = data[index - 1]?.path;
                           prevPath && navigate(prevPath);
                         }
                       }
@@ -188,7 +194,7 @@ const NavTab: React.FC<NavTabProps> = ({ left = 0 }) => {
         </div>
 
         {/* 下拉操作 */}
-        <Dropdown menu={dropdownMenu} trigger={["click", "hover"]}>
+        <Dropdown menu={dropdownMenu} trigger={["click"]}>
           <Iconfont className="nav_tab_dropdown" type="sentimental-down" fontSize={12} />
         </Dropdown>
       </div>
@@ -206,7 +212,7 @@ const Wrapper = styled.div<{ showControl: boolean }>`
     height: 44px;
     background-color: #f5f7f9;
     /* transition: all 0.2s ease-in-out; */
-    transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in-out;
     z-index: 5;
     position: fixed;
     padding: 6px 12px;

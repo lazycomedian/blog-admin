@@ -43,7 +43,7 @@ export const useRouteMenuObject = () => {
   const { userStore } = useStore();
 
   const pathname = usePathname();
-  return useMemo(() => userStore.flattenUserMenu.find(item => item.fullPath === pathname), [pathname]);
+  return useMemo(() => userStore.flattenUserMenu.find(item => item.path === pathname), [pathname]);
 };
 
 /**

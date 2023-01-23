@@ -6,7 +6,6 @@ import Iconfont from "@/components/Iconfont";
 import { iconfontTypes } from "@/constants";
 import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import * as antdIcons from "@ant-design/icons";
-import { concatString } from "@sentimental/toolkit";
 import React from "react";
 
 /**
@@ -112,7 +111,7 @@ export function getUserMenuTree(menu: UserMenuModel[]): AntdMenuItem[] {
     return {
       label: item.name,
       children,
-      key: concatString(item.prefixPath, item.path),
+      key: item.path,
       icon: getAntdIconNode(item.icon)
     };
   });

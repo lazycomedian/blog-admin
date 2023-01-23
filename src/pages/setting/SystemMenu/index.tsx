@@ -15,7 +15,6 @@ import { useStore } from "@/store";
 import { tips } from "@/utils";
 import { allPagesMap, getAntdIconNode, getModalTypeLabel } from "@/utils/common";
 import { CrownFilled } from "@ant-design/icons";
-import { concatString } from "@sentimental/toolkit";
 import { useMemoizedFn, useRequest } from "ahooks";
 import { Form, Input, InputNumber, Select, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
@@ -24,29 +23,32 @@ import { useColumns } from "./lib";
 const SystemMenu: React.FC = props => {
   const { userStore } = useStore();
 
-  const [submitLoading, setSubmitLoading] = useState(false);
-
-  const [currentIconName, setCurrentIconName] = useState<string>();
-
   // 表单弹窗控制器
   const formModalRef = useFormModalRef<Partial<SysMenuModel>>({ status: CommonStatusEnum.AVAILABLE });
 
   // 图标选择控制器
   const iconPickerRef = useModalRef();
 
-  const { run, loading, data = [] } = useRequest(SysMenuService.findAll, { onError: error => tips.error(error.message) });
+  const [submitLoading, setSubmitLoading] = useState(false);
+
+  const [currentIconName, setCurrentIconName] = useState<string>();
+
+  const { run, loading, data = [] } = useRequest(SysMenuService.findAll, { onError: ({ message }) => tips.error(message) });
 
   const columns = useColumns({
     reload: () => {
       run();
       userStore.updateUserMenu();
     },
-    onEdit: (v, record) => formModalRef.show(ModalTypeEnum.EDIT, record),
+    onEdit: (v, record) => {
+      const modifiablePath = record.path.replace(record.prefixPath || "", "");
+      formModalRef.show(ModalTypeEnum.EDIT, { ...record, path: modifiablePath });
+    },
     onAdd: (v, record) => {
       formModalRef.show(ModalTypeEnum.ADD, {
         pid: record.id,
         status: CommonStatusEnum.AVAILABLE,
-        prefixPath: concatString(record.prefixPath, record.path),
+        prefixPath: record.path,
         sort: (record.children?.length || 0) + 1
       });
     }
@@ -62,14 +64,15 @@ const SystemMenu: React.FC = props => {
     const prefixTips = getModalTypeLabel(modalType);
     if (modalType === ModalTypeEnum.EDIT) result.id = formModalRef.currentRecord?.id;
 
+    const fullPath = (result.prefixPath || "") + (result.path.startsWith("/") ? result.path : "/" + result.path);
     try {
-      await SysMenuService.saveOrUpdate(result);
+      await SysMenuService.saveOrUpdate({ ...result, path: fullPath });
       tips.success(prefixTips + "成功");
       run();
       userStore.updateUserMenu();
       formModalRef.close();
-    } catch (error) {
-      tips.error(prefixTips + "失败");
+    } catch (error: any) {
+      tips.error(`${prefixTips}失败${error?.message ? "，" + error?.message : ""}`);
     } finally {
       setSubmitLoading(false);
     }
@@ -111,20 +114,7 @@ const SystemMenu: React.FC = props => {
         <Form.Item label="菜单名称" name="name" rules={[{ required: true, message: "请输入菜单名称" }]}>
           <Input allowClear placeholder="请输入菜单名称" />
         </Form.Item>
-        <Form.Item
-          label="图标"
-          name="icon"
-          // rules={[
-          //   { required: true, message: "请输入或选择图标名称" },
-          //   {
-          //     message: "请输入或选择正确的图标",
-          //     validator: async (rule, value) => {
-          //       if (!value) return Promise.resolve();
-          //       if (!getAntdIconNode(currentIconName)) return Promise.reject();
-          //     }
-          //   }
-          // ]}
-        >
+        <Form.Item label="图标" name="icon">
           <Input
             placeholder="请输入图标名称，点击右侧可选择"
             prefix={getAntdIconNode(currentIconName)}

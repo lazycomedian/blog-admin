@@ -4,7 +4,6 @@ import { UserMenuModel } from "@/model/settings";
 import { SysMenuService } from "@/service";
 import { logger, storage } from "@/utils";
 import { allPagesMap } from "@/utils/common";
-import { concatString } from "@sentimental/toolkit";
 import { makeAutoObservable } from "mobx";
 import React from "react";
 import { RouteObject } from "react-router-dom";
@@ -64,7 +63,6 @@ export class UserStore {
   public getFlatUserMenu(menu: UserMenuModel[]): UserMenuModel[] {
     const result: UserMenuModel[] = [];
     menu.forEach(item => {
-      item.fullPath = concatString(item.prefixPath, item.path);
       result.push(item);
       if (item.children?.length) result.push(...this.getFlatUserMenu(item.children));
     });
@@ -94,7 +92,7 @@ export class UserStore {
 
       return {
         id: item.id.toString(),
-        path: concatString(item.prefixPath, item.path),
+        path: item.path,
         element,
         children: Array.isArray(item.children) ? this.getRouteObjectList(item.children) : undefined
       };

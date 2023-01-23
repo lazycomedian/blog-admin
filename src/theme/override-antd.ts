@@ -77,6 +77,13 @@ export const overrideAntdCss = css`
     }
   }
 
+  .ant-dropdown-menu {
+    padding: 6px !important;
+    .ant-dropdown-menu-item-divider {
+      margin: 4px -6px !important;
+    }
+  }
+
   /**  <---- modal style   */
   .ant-modal.ant-modal-confirm {
     .ant-modal-content {
