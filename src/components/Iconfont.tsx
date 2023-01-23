@@ -9,11 +9,13 @@ interface IconfontProps extends Pick<React.CSSProperties, "color" | "fontSize"> 
   className?: string;
   style?: React.CSSProperties;
   rotate?: number;
+  onClick?: () => void;
 }
 
-const Iconfont: React.FC<IconfontProps> = ({ type, className, style, fontSize, color, rotate }) => {
+const Iconfont: React.FC<IconfontProps> = props => {
+  const { type, className, style, fontSize, color, rotate, onClick } = props;
   return (
-    <Wrapper color={color} rotate={rotate} className={className} style={{ fontSize, ...style }}>
+    <Wrapper {...{ onClick, rotate, className, color }} style={{ fontSize, ...style }}>
       <IconfontCN type={type} />
     </Wrapper>
   );

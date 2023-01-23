@@ -31,8 +31,9 @@
   },
   "devDependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@sentimental/hooks": "^0.1.5",
     "@sentimental/request": "^0.1.1",
-    "@sentimental/toolkit": "^0.1.4",
+    "@sentimental/toolkit": "^0.1.5",
     "@types/lodash": "^4.14.186",
     "@types/node": "^18.7.21",
     "@types/react": "^18.0.21",

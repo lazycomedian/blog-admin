@@ -1,3 +1,4 @@
+import Iconfont from "@/components/Iconfont";
 import { APPLICATION_ELEMENT_ID } from "@/constants";
 import { CommonRouteEnum } from "@/enums";
 import {
@@ -6,12 +7,11 @@ import {
   ExportOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  ReloadOutlined,
   UserOutlined
 } from "@ant-design/icons";
 import { useFullscreen } from "ahooks";
-import { Dropdown, Modal } from "antd";
-import React, { memo } from "react";
+import { Dropdown, MenuProps, Modal } from "antd";
+import React, { memo, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Breadcrumb from "../Breadcrumb";
@@ -27,6 +27,34 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = ({ collapsed, onTriggerClick, 
 
   const navigate = useNavigate();
 
+  const dropdownMenu = useMemo<MenuProps>(() => {
+    return {
+      onClick: e => {
+        switch (e.key) {
+          case "user_center":
+            navigate(CommonRouteEnum.USER_CENTER);
+            break;
+          case "logout":
+            Modal.confirm({
+              title: "退出登录确认",
+              content: "您确定退出登录当前账户吗？打开的标签页和个人设置将会保存。",
+              cancelButtonProps: { type: "text" },
+              onOk: close => {
+                close();
+              },
+              type: "warning"
+            });
+            break;
+        }
+      },
+      items: [
+        { key: "user_center", label: "个人中心", icon: <UserOutlined style={{ fontSize: 16 }} /> },
+        { type: "divider" },
+        { key: "logout", label: "退出登录", icon: <ExportOutlined style={{ fontSize: 16 }} /> }
+      ]
+    };
+  }, []);
+
   return (
     <Wrapper>
       <header className="i-header">
@@ -39,7 +67,8 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = ({ collapsed, onTriggerClick, 
         </ItemButton>
         {/* 刷新页面 */}
         <ItemButton onClick={onReload}>
-          <ReloadOutlined />
+          {/* <ReloadOutlined /> */}
+          <Iconfont type="sentimental-reload" fontSize={16} rotate={40} />
         </ItemButton>
 
         {/* 面包屑 */}
@@ -51,33 +80,7 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = ({ collapsed, onTriggerClick, 
             {React.createElement(isFullscreen ? CompressOutlined : ExpandOutlined)}
           </ItemButton>
           {/* 登录用户 */}
-          <Dropdown
-            menu={{
-              onClick: e => {
-                switch (e.key) {
-                  case "user_center":
-                    navigate(CommonRouteEnum.USER_CENTER);
-                    break;
-                  case "logout":
-                    Modal.confirm({
-                      title: "退出登录确认",
-                      content: "您确定退出登录当前账户吗？打开的标签页和个人设置将会保存。",
-                      cancelButtonProps: { type: "text" },
-                      onOk: close => {
-                        close();
-                      },
-                      type: "warning"
-                    });
-                    break;
-                }
-              },
-              items: [
-                { key: "user_center", label: "个人中心", icon: <UserOutlined style={{ fontSize: 16 }} /> },
-                { type: "divider" },
-                { key: "logout", label: "退出登录", icon: <ExportOutlined style={{ fontSize: 16 }} /> }
-              ]
-            }}
-          >
+          <Dropdown menu={dropdownMenu}>
             <ItemButton>
               <span className="login_user">admin</span>
             </ItemButton>

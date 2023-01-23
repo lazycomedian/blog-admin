@@ -55,7 +55,7 @@ export class UserStore {
   }
 
   /** 扁平化用户菜单 */
-  public get flattenUserMenu() {
+  public get flattenUserMenu(): UserMenuModel[] {
     return this.getFlatUserMenu(this.userMenu);
   }
 
@@ -63,13 +63,14 @@ export class UserStore {
    * 获取扁平化用户菜单
    * @param menu
    */
-  public getFlatUserMenu(menu: UserMenuModel[]) {
+  public getFlatUserMenu(menu: UserMenuModel[]): UserMenuModel[] {
     const result: UserMenuModel[] = [];
     menu.forEach(item => {
+      item.fullPath = concatString(item.prefixPath, item.path);
       result.push(item);
       if (item.children?.length) result.push(...this.getFlatUserMenu(item.children));
     });
-    return result.map(item => ({ ...item, fullPath: concatString(item.prefixPath, item.path) }));
+    return result;
   }
 
   /** 页面路由集合 */

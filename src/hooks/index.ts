@@ -1,5 +1,4 @@
-export * from "./useAppTitle";
-export * from "./usePathname";
+export * from "./common";
 export * from "./useTableColumns";
 export * from "./useTableExpand";
 export * from "./useTableRequest";

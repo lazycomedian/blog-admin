@@ -1,4 +1,4 @@
-import { withModal } from "@/hooks/modal";
+import { withModal } from "@/components/ModalHoc";
 import { getAntdIconNames, getAntdIconNode } from "@/utils/common";
 import { SearchOutlined } from "@ant-design/icons";
 import { Col, Divider, Empty, Input, Row } from "antd";

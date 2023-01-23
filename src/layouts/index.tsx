@@ -15,13 +15,15 @@ const BasicLayout: React.FC = () => {
   if (storage.has(StorageKeyEnum.TOKEN)) return <Navigate to={CommonRouteEnum.LOGIN} />;
   const navigate = useNavigate();
 
+  // 左侧菜单是否收起
   const [collapsed, setCollapsed] = useState(false);
 
+  // 当前路由的唯一key，用于重载页面组件
   const [routeKey, setRouteKey] = useState(Date.now());
 
   useAppTitle();
 
-  const left = useMemo(() => (collapsed ? 80 : 200), [collapsed]);
+  const menuWidth = useMemo<number>(() => (collapsed ? 80 : 200), [collapsed]);
 
   return (
     <Wrapper>
@@ -36,14 +38,15 @@ const BasicLayout: React.FC = () => {
           <LayoutMenu collapsed={collapsed} />
         </Layout.Sider>
 
-        <Layout className="i-layout-main" style={{ paddingLeft: left }}>
+        <Layout className="i-layout-main" style={{ paddingLeft: menuWidth }}>
           <LayoutHeader
             collapsed={collapsed}
             onReload={() => setRouteKey(Date.now())}
             onTriggerClick={() => setCollapsed(prev => !prev)}
           />
 
-          <NavTab left={left} />
+          {/* 导航标签页 */}
+          <NavTab left={menuWidth} />
 
           <Layout.Content className="content">
             {/* 路由占位 */}
