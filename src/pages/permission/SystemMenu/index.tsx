@@ -4,8 +4,9 @@ import FormModal, { useFormModalRef } from "@/components/FormModal";
 import IconPicker from "@/components/IconPicker";
 import { useModalRef } from "@/components/ModalHoc";
 import StatusFormItem from "@/components/StatusFormItem";
+import { TRUE } from "@/constants";
 import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
-import { useTableExpand } from "@/hooks";
+import { usePathname, useTableExpand } from "@/hooks";
 import PageCard from "@/layouts/PageCard";
 import PageHeader from "@/layouts/PageHeader";
 import { SaveOrUpdateModel } from "@/model/common";
@@ -15,16 +16,18 @@ import { useStore } from "@/store";
 import { tips } from "@/utils";
 import { allPagesMap, getAntdIconNode, getModalTypeLabel } from "@/utils/common";
 import { CrownFilled } from "@ant-design/icons";
+import { concatString } from "@sentimental/toolkit";
 import { useMemoizedFn, useRequest } from "ahooks";
-import { Form, Input, InputNumber, Select, Table, Typography } from "antd";
-import React, { useEffect, useState } from "react";
+import { Form, Input, InputNumber, Radio, Select, Table, Typography } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
 import { useColumns } from "./lib";
 
 const SystemMenu: React.FC = props => {
   const { userStore } = useStore();
+  const pathname = usePathname();
 
   // 表单弹窗控制器
-  const formModalRef = useFormModalRef<Partial<SysMenuModel>>({ status: CommonStatusEnum.AVAILABLE });
+  const formModalRef = useFormModalRef<Partial<SysMenuModel>>({ status: CommonStatusEnum.AVAILABLE, visible: TRUE });
 
   // 图标选择控制器
   const iconPickerRef = useModalRef();
@@ -41,8 +44,10 @@ const SystemMenu: React.FC = props => {
       userStore.updateUserMenu();
     },
     onEdit: (v, record) => {
-      const modifiablePath = record.path.replace(record.prefixPath || "", "");
-      formModalRef.show(ModalTypeEnum.EDIT, { ...record, path: modifiablePath });
+      formModalRef.show(ModalTypeEnum.EDIT, {
+        ...record,
+        path: record.path.replace(record.prefixPath || "", "")
+      });
     },
     onAdd: (v, record) => {
       formModalRef.show(ModalTypeEnum.ADD, {
@@ -82,6 +87,28 @@ const SystemMenu: React.FC = props => {
     setCurrentIconName(formModalRef.currentRecord?.icon);
   }, [formModalRef.currentRecord]);
 
+  const sortLimitMax = useMemo(() => {
+    const { currentRecord, getModalType } = formModalRef;
+    if (getModalType() === ModalTypeEnum.ADD) {
+      if (currentRecord?.prefixPath) {
+        const list = userStore.flattenUserMenu.filter(item => item.prefixPath === currentRecord.prefixPath);
+        return list.length + 1;
+      } else {
+        // 一级菜单添加
+        return userStore.userMenu.length + 1;
+      }
+    } else {
+      if (currentRecord?.pid) {
+        const parent = userStore.flattenUserMenu.find(item => item.id === currentRecord.pid);
+        if (typeof parent?.children?.length !== "number") return undefined;
+        return parent.children.length + 1;
+      } else {
+        // 一级目录编辑
+        return userStore.userMenu.length + 1;
+      }
+    }
+  }, [formModalRef.currentRecord]);
+
   // 重写表格展开样式
   const tableExpand = useTableExpand();
 
@@ -89,9 +116,8 @@ const SystemMenu: React.FC = props => {
     <React.Fragment>
       <PageHeader />
       <PageCard>
-        <BasicSearch placeholder="请输入菜单名称" onChange={status => run({ status })} onSearch={content => run({ content })} />
+        <BasicSearch placeholder="请输入菜单名称" onSearch={run} />
         <AddButton onClick={() => formModalRef.show(ModalTypeEnum.ADD, { sort: data.length + 1 })}>添加菜单</AddButton>
-
         <Table
           rowKey="id"
           columns={columns}
@@ -107,6 +133,7 @@ const SystemMenu: React.FC = props => {
       <FormModal
         ref={formModalRef}
         title="菜单"
+        double
         loading={submitLoading}
         initialValues={formModalRef.currentRecord}
         onSubmit={submit}
@@ -143,14 +170,23 @@ const SystemMenu: React.FC = props => {
           <Select
             allowClear
             showSearch
-            placeholder="请选择组件路径"
+            placeholder="目录"
             options={Array.from(allPagesMap.keys(), path => ({ label: path, value: path }))}
           />
         </Form.Item>
         <Form.Item label="排序" name="sort" rules={[{ required: true, message: "请输入排序" }]}>
-          <InputNumber placeholder="请输入排序" min={1} />
+          <InputNumber placeholder="请输入排序" min={1} max={sortLimitMax} />
         </Form.Item>
-        <StatusFormItem />
+
+        <StatusFormItem
+          disabled={pathname === concatString(formModalRef.currentRecord?.prefixPath, formModalRef.currentRecord?.path)}
+        />
+        <Form.Item label="是否显示" name="visible">
+          <Radio.Group>
+            <Radio value={1}>显示</Radio>
+            <Radio value={0}>隐藏</Radio>
+          </Radio.Group>
+        </Form.Item>
       </FormModal>
 
       <IconPicker

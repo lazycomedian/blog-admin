@@ -1,15 +1,17 @@
 import type { SysMenuModel } from "@/model/settings";
 import type { UseColumns } from "@/typings/common";
 
-import { useTableColumns } from "@/hooks";
+import { usePathname, useTableColumns } from "@/hooks";
 import { SysMenuService } from "@/service";
 import { tips } from "@/utils";
 import { getAntdIconNode } from "@/utils/common";
-import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
+import { getOperationRender, getStatusRender, timeRender, whetherRender } from "@/utils/render";
 import { useMemoizedFn } from "ahooks";
 import React from "react";
 
 export const useColumns: UseColumns<SysMenuModel> = ({ reload, onEdit, onAdd }) => {
+  const pathname = usePathname();
+
   /**
    * 删除菜单
    * @param id
@@ -29,7 +31,16 @@ export const useColumns: UseColumns<SysMenuModel> = ({ reload, onEdit, onAdd }) 
     { title: "图标", key: "icon", width: 70, render: icon => getAntdIconNode(icon, { style: { fontSize: 18 } }) },
     { title: "页面路由", key: "path", width: 180, ellipsis: true },
     { title: "组件路径", key: "component", width: 160, render: v => v ?? "目录" },
-    { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysMenuService.switch }) },
+    {
+      title: "状态",
+      key: "status",
+      render: getStatusRender(record => ({
+        onChange: reload,
+        service: SysMenuService.switch,
+        disabled: pathname === record.path
+      }))
+    },
+    { title: "是否显示", key: "visible", align: "center", render: whetherRender },
     { title: "排序", key: "sort" },
     { title: "创建时间", key: "createTime", render: timeRender },
     {

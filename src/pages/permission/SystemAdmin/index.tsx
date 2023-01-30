@@ -58,11 +58,7 @@ const SystemAdmin: React.FC = () => {
     <React.Fragment>
       <PageHeader />
       <PageCard>
-        <BasicSearch
-          placeholder="请输入昵称或者账号"
-          onChange={status => getList({ status })}
-          onSearch={content => getList({ content })}
-        />
+        <BasicSearch placeholder="请输入昵称或者账号" onSearch={getList} />
         <AddButton onClick={() => formModalRef.show()}>添加管理员</AddButton>
 
         <Table rowKey="id" columns={columns} {...tableProps} scroll={{ x: true }} />
@@ -73,23 +69,24 @@ const SystemAdmin: React.FC = () => {
         ref={formModalRef}
         title="管理员"
         loading={submitLoading}
+        double
         initialValues={formModalRef.currentRecord}
         onSubmit={submit}
       >
         <Form.Item label="管理员账号" name="username" rules={[{ required: true, message: "请输入管理员账号" }]}>
           <Input placeholder="请输入管理员账号" />
         </Form.Item>
-        <Form.Item label="管理员密码" name="password" rules={[{ required: true, message: "请输入管理员密码" }]}>
-          <Input.Password placeholder="请输入管理员密码" />
-        </Form.Item>
-        <Form.Item label="确认密码" name="confirmPassword" rules={[{ required: true, message: "请输入确认密码" }]}>
-          <Input.Password placeholder="请再次输入密码" />
-        </Form.Item>
         <Form.Item label="管理员昵称" name="nickname" rules={[{ required: true, message: "请输入管理员昵称" }]}>
           <Input placeholder="请输入管理员昵称" />
         </Form.Item>
+        <Form.Item label="管理员密码" name="password" rules={[{ required: true, message: "请输入管理员密码" }]}>
+          <Input.Password placeholder="请输入管理员密码" />
+        </Form.Item>
         <Form.Item label="管理员角色" name="role" rules={[{ required: true, message: "请选择管理员角色" }]}>
           <Select placeholder="请选择管理员角色" />
+        </Form.Item>
+        <Form.Item label="确认密码" name="confirmPassword" rules={[{ required: true, message: "请输入确认密码" }]}>
+          <Input.Password placeholder="请再次输入密码" />
         </Form.Item>
         <StatusFormItem />
       </FormModal>

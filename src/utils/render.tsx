@@ -1,7 +1,8 @@
 import type { ColumnRender, GetOperationRender, GetStatusRender } from "@/typings/render";
 
+import Iconfont from "@/components/Iconfont";
 import StatusSwitch from "@/components/StatusSwitch";
-import { EMPTY_PLACE_HOLDER, FORMAT } from "@/constants";
+import { EMPTY_PLACE_HOLDER, FALSE, FORMAT, TRUE } from "@/constants";
 import { isFunction } from "@sentimental/toolkit";
 import { Divider, Popconfirm, Typography } from "antd";
 import React from "react";
@@ -14,18 +15,35 @@ import { dayjs } from ".";
 export const timeRender: ColumnRender = value => (value ? dayjs(value).format(FORMAT) : EMPTY_PLACE_HOLDER);
 
 /**
+ * 通用是否渲染方法，用于table表格列配置
+ * @param value
+ */
+export const whetherRender: ColumnRender = value =>
+  Reflect.get(
+    {
+      [TRUE]: <Iconfont color="#49a819" type="sentimental-duigou" />,
+      [FALSE]: <Iconfont color="#d83e40" type="sentimental-chahao" />
+    },
+    value
+  ) || EMPTY_PLACE_HOLDER;
+
+/**
  * 获取通用状态渲染方法，用于table表格列配置
  * @param onChange 状态改变事件
  */
-export const getStatusRender: GetStatusRender = ({ service, onChange, rowKey }) => {
-  return (value, record, index) => (
-    <StatusSwitch
-      record={record}
-      rowKey={rowKey}
-      service={service}
-      onChange={data => onChange && onChange(data, record, index)}
-    />
-  );
+export const getStatusRender: GetStatusRender = props => {
+  return (value, record, index) => {
+    const { service, onChange, rowKey, disabled } = isFunction(props) ? props(record) : props;
+    return (
+      <StatusSwitch
+        record={record}
+        rowKey={rowKey}
+        service={service}
+        disabled={disabled}
+        onChange={data => onChange && onChange(data, record, index)}
+      />
+    );
+  };
 };
 
 /**

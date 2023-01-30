@@ -9,12 +9,17 @@ export type ColumnRender<RecordType = any> = ColumnType<RecordType>["render"];
 /** 表格列点击方法 */
 type ColumnClick<RecordType> = (...args: Parameters<Exclude<ColumnRender<RecordType>, undefined>>) => void;
 
-/** 获取状态列render方法 */
-export type GetStatusRender = <RecordType = any>(props: {
+interface StatusRenderProps {
   service(id: number, status: CommonStatusEnum): Promise<any>;
   onChange?: UseColumnsProps["onStatusChange"];
   rowKey?: string;
-}) => ColumnRender<RecordType>;
+  disabled?: boolean;
+}
+
+/** 获取状态列render方法 */
+export type GetStatusRender = <RecordType = any>(
+  props: StatusRenderProps | ((record: RecordType) => StatusRenderProps)
+) => ColumnRender<RecordType>;
 
 /** 操作列选项 */
 interface ROptions<RecordType> extends Omit<LinkProps, "onClick"> {
@@ -24,7 +29,7 @@ interface ROptions<RecordType> extends Omit<LinkProps, "onClick"> {
 
 /** 获取操作列render方法 */
 export type GetOperationRender = <RecordType = any>(
-  options: ROptions<RecordType>[] | ((record: RecordType) => ROptions<RecordType>[])
+  options: Array<ROptions<RecordType>> | ((record: RecordType) => Array<ROptions<RecordType>>)
 ) => ColumnRender<RecordType>;
 
 /** 通用表格列hook方法参数 */

@@ -7,11 +7,9 @@ export const overrideToken: OverrideToken = {
   Button: {
     fontSizeLG: 15,
     fontSize: 13
-    // colorPrimary: " rgba(59, 72, 89,1)",
-    // colorPrimaryHover: "rgba(59, 72, 89,.9)",
-    // colorPrimaryActive: "rgba(70, 72, 89,1)"
   }
 };
+
 const token: Partial<AliasToken> = {
   colorPrimary: "#2d8cf0",
   colorLink: "#5594f2",

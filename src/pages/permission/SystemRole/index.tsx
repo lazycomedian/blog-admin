@@ -60,11 +60,7 @@ const SystemRole: React.FC = () => {
     <React.Fragment>
       <PageHeader />
       <PageCard>
-        <BasicSearch
-          placeholder="请输入角色名称"
-          onChange={status => getList({ status })}
-          onSearch={content => getList({ content })}
-        />
+        <BasicSearch placeholder="请输入角色名称" onSearch={getList} />
         <AddButton onClick={() => formModalRef.show(ModalTypeEnum.ADD)}>添加角色</AddButton>
 
         <Table rowKey="id" columns={columns} {...tableProps} scroll={{ x: true }} />

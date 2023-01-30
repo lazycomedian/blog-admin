@@ -53,6 +53,10 @@ export interface SysMenuModel extends BaseModel {
    */
   sort: number;
   /**
+   * 是否显示
+   */
+  visible: number;
+  /**
    * 父级id
    */
   pid?: number;
@@ -62,7 +66,9 @@ export interface SysMenuModel extends BaseModel {
   children?: SysMenuModel[];
 }
 
-export interface UserMenuModel extends BaseModel, Pick<SysMenuModel, "name" | "path" | "component" | "icon" | "prefixPath"> {
+export interface UserMenuModel
+  extends BaseModel,
+    Pick<SysMenuModel, "name" | "path" | "component" | "icon" | "prefixPath" | "visible"> {
   /**
    * 用户子菜单列表
    */

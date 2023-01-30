@@ -9,23 +9,25 @@ const { AVAILABLE, DISABLED } = CommonStatusEnum;
 
 interface StatusSwitchProps {
   record: any;
-  service: (id: number, status: CommonStatusEnum) => Promise<any>;
   rowKey?: string;
+  service: (id: number, status: CommonStatusEnum) => Promise<any>;
   onChange?: (data: any) => void;
+  disabled?: boolean;
 }
 
 const StatusSwitch: React.FC<StatusSwitchProps> = props => {
-  const { service = async () => logger.warning("StatusSwitch: 缺少修改状态接口"), onChange, rowKey = "id", record } = props;
+  const { service = async () => logger.warning("@/components/StatusSwitch", "缺少修改状态接口"), rowKey = "id", record } = props;
 
   const { loading, run: update } = useRequest(service, {
     manual: true,
-    onSuccess: onChange,
+    onSuccess: props.onChange,
     onError: e => tips.error(e.message)
   });
 
   return (
     <Switch
       loading={loading}
+      disabled={props.disabled}
       onChange={checked => update(record[rowKey], checked ? AVAILABLE : DISABLED)}
       checked={record.status === AVAILABLE}
       checkedChildren={getCommonStatusLabel(AVAILABLE)}

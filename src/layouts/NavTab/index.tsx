@@ -8,6 +8,7 @@ import { useLocalStorage } from "@sentimental/hooks";
 import { isNumber } from "@sentimental/toolkit";
 import { useEventListener, useMemoizedFn, useScroll, useSize } from "ahooks";
 import { Dropdown, MenuProps } from "antd";
+import { observer } from "mobx-react";
 import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -50,6 +51,19 @@ const NavTab: React.FC<NavTabProps> = ({ left = 0 }) => {
       currentRouteMenu && setData(prev => prev.concat([currentRouteMenu]));
     }
   }, [currentRouteMenu]);
+
+  useEffect(() => {
+    if (data.some(item => userStore.flattenUserMenu.some(f => f.id === item.id && f.path !== item.path))) {
+      setData(prev => {
+        const result = [...prev];
+        result.forEach(item => {
+          const latestPath = userStore.flattenUserMenu.find(f => f.id === item.id)?.path;
+          if (latestPath) item.path = latestPath;
+        });
+        return result;
+      });
+    }
+  }, [userStore.flattenUserMenu]);
 
   useEffect(() => {
     // 确保tab中至少存在一个主页标签
@@ -202,7 +216,7 @@ const NavTab: React.FC<NavTabProps> = ({ left = 0 }) => {
   );
 };
 
-export default memo(NavTab);
+export default memo(observer(NavTab));
 
 const Wrapper = styled.div<{ showControl: boolean }>`
   height: 44px;
@@ -212,7 +226,7 @@ const Wrapper = styled.div<{ showControl: boolean }>`
     height: 44px;
     background-color: #f5f7f9;
     /* transition: all 0.2s ease-in-out; */
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-out;
     z-index: 5;
     position: fixed;
     padding: 6px 12px;

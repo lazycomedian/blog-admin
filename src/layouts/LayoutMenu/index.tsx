@@ -47,7 +47,7 @@ const LayoutMenu: React.FC<LayoutMenuProps> = ({ collapsed }) => {
           if (latestOpenKey && !openKeys.includes(latestOpenKey) && openKeys.every(key => key.includes(latestOpenKey))) {
             // 解决antd官网示例中三级菜单展开后收起当前一级菜单再展开一级菜单的闪烁问题
             setOpenKeys([latestOpenKey, ...keys]);
-          } else if (!userStore.userMenu.map(item => item.path).includes(latestOpenKey)) {
+          } else if (latestOpenKey && !userStore.userMenu.map(item => item.path).includes(latestOpenKey)) {
             setOpenKeys(keys);
           } else {
             if (latestOpenKey) {

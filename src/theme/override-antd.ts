@@ -79,6 +79,7 @@ export const overrideAntdCss = css`
 
   .ant-dropdown-menu {
     padding: 6px !important;
+    box-shadow: 0 1px 6px rgb(0 0 0 / 20%) !important;
     .ant-dropdown-menu-item-divider {
       margin: 4px -6px !important;
     }
@@ -115,7 +116,7 @@ export const overrideAntdCss = css`
       margin: 0;
     }
     .ant-modal-body {
-      padding: 16px 20px;
+      padding: 24px 20px 16px;
     }
   }
   /* .ant-modal-header {

@@ -18,6 +18,11 @@ export interface FormContentProps<Values = any> extends React.PropsWithChildren 
    * 表单配置项
    */
   options?: FormItemProps<Values>[];
+  /**
+   * 是否展示为两列表单
+   * @default false
+   */
+  double?: boolean;
 }
 
 export interface FormModalProps<Values = any> extends FormContentProps<Values>, PropsWithModalRef<FormModalRef> {

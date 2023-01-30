@@ -3,7 +3,7 @@ import type { AntdIconStyle, AntdMenuItem, IconfontType } from "@/typings/common
 import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 
 import Iconfont from "@/components/Iconfont";
-import { iconfontTypes } from "@/constants";
+import { iconfontTypes, TRUE } from "@/constants";
 import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import * as antdIcons from "@ant-design/icons";
 import React from "react";
@@ -103,18 +103,20 @@ export const getCommonStatusLabel = (status: CommonStatusEnum | string) => {
  * @param menu
  */
 export function getUserMenuTree(menu: UserMenuModel[]): AntdMenuItem[] {
-  return menu.map(item => {
-    let children: AntdMenuItem[] | undefined = undefined;
-    if (item.children?.length) children = getUserMenuTree(item.children);
-    if (!item.component && !children?.length) children = [];
+  return menu
+    .filter(item => item.visible === TRUE)
+    .map(item => {
+      let children: AntdMenuItem[] | undefined = undefined;
+      if (item.children?.length) children = getUserMenuTree(item.children);
+      if (!item.component && !children?.length) children = [];
 
-    return {
-      label: item.name,
-      children,
-      key: item.path,
-      icon: getAntdIconNode(item.icon)
-    };
-  });
+      return {
+        label: item.name,
+        children,
+        key: item.path,
+        icon: getAntdIconNode(item.icon)
+      };
+    });
 }
 
 /**

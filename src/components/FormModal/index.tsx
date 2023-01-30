@@ -16,7 +16,7 @@ export * from "./lib/hooks";
  */
 
 const FormModal = forwardRef<FormModalRef, FormModalProps>((props, ref) => {
-  const { title = "", width = 700, ...formContentProps } = props;
+  const { title = "", width = props.double ? 850 : 700, ...formContentProps } = props;
 
   const [modalType, setModalType] = useState<ModalTypeEnum>(ModalTypeEnum.ADD);
 

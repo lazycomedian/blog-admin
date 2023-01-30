@@ -83,7 +83,7 @@ const Wrapper = styled.div`
         cursor: pointer;
 
         :hover {
-          background-color: #5c6b77;
+          background-color: #5c6b77 !important;
           color: #fff !important;
           transform: scale(1.2);
         }

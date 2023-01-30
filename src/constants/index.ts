@@ -6,6 +6,12 @@ export const EMPTY_PLACE_HOLDER = "";
 /** 时间格式化方式 */
 export const FORMAT = "YYYY-MM-DD HH:mm:ss";
 
+/** 是 */
+export const TRUE = 1;
+
+/** 否 */
+export const FALSE = 0;
+
 /** 自定义的iconfont名称集合 */
 export const iconfontTypes = [
   "sentimental-octocat",
@@ -15,5 +21,7 @@ export const iconfontTypes = [
   "sentimental-right",
   "sentimental-user",
   "sentimental-close",
-  "sentimental-down"
+  "sentimental-down",
+  "sentimental-duigou",
+  "sentimental-chahao"
 ] as const;
