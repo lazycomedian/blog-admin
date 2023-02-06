@@ -21,9 +21,13 @@ export interface SysAdminModel extends BaseModel {
    */
   nickname: string;
   /**
-   * 密码
+   * 关联的角色列表
    */
-  password: string;
+  roleList: { id: number; roleName: string }[];
+  /**
+   * 关联的角色id集合
+   */
+  roleIds?: number[];
 }
 
 // <---------------------- 菜单管理模型 ----------------------> //

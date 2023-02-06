@@ -57,6 +57,6 @@ export const logger = new Logger(`${import.meta.env.VITE_APP_TITLE} MODE:${impor
 export const bizRequest = new BizRequest({
   timeout: 15000,
   withCredentials: true,
-  baseURL: "/api",
+  baseURL: "/api/admin",
   code: StatusCodeEnum.SUCCESS
 });

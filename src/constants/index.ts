@@ -12,6 +12,9 @@ export const TRUE = 1;
 /** 否 */
 export const FALSE = 0;
 
+/** 超级管理员id，不可操作 */
+export const SUPER_ADMIN_ID = 1;
+
 /** 自定义的iconfont名称集合 */
 export const iconfontTypes = [
   "sentimental-octocat",

@@ -8,8 +8,9 @@ export interface FormContentProps<Values = any> extends React.PropsWithChildren 
   /**
    * 表单提交事件
    * @param result 提交的表单内容
+   * @param label 表单弹窗的类型描述
    */
-  onSubmit?(result: Values): void;
+  onSubmit?(result: Values, label: string): void;
   /**
    * 表单初始值
    */
@@ -22,7 +23,7 @@ export interface FormContentProps<Values = any> extends React.PropsWithChildren 
    * 是否展示为两列表单
    * @default false
    */
-  double?: boolean;
+  doubleColumn?: boolean;
 }
 
 export interface FormModalProps<Values = any> extends FormContentProps<Values>, PropsWithModalRef<FormModalRef> {
@@ -61,11 +62,7 @@ interface UseFormModalRefReturn<R> extends React.RefObject<FormModalRef>, Pick<U
   /**
    * 当前暂存的记录值
    */
-  currentRecord: R | undefined;
-  /**
-   * 获取表单控制器
-   */
-  getFormInstance(): FormInstance | undefined;
+  record: R | undefined;
   /**
    * 弹窗类型
    * @default ModalTypeEnum.ADD

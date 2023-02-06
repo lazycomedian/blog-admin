@@ -16,7 +16,7 @@ export * from "./lib/hooks";
  */
 
 const FormModal = forwardRef<FormModalRef, FormModalProps>((props, ref) => {
-  const { title = "", width = props.double ? 850 : 700, ...formContentProps } = props;
+  const { title = "", width = props.doubleColumn ? 850 : 700, ...formContentProps } = props;
 
   const [modalType, setModalType] = useState<ModalTypeEnum>(ModalTypeEnum.ADD);
 
@@ -40,7 +40,7 @@ const FormModal = forwardRef<FormModalRef, FormModalProps>((props, ref) => {
 
   return (
     <Modal title={dynamicTitle} open={open} onCancel={close} width={width} destroyOnClose maskClosable={false} footer={null}>
-      <FormContent {...formContentProps} ref={formRef} />
+      <FormContent {...formContentProps} label={getModalTypeLabel(modalType)} ref={formRef} />
     </Modal>
   );
 });

@@ -1,9 +1,9 @@
+import { SysMenuAPI } from "@/api";
 import Loading from "@/components/Loading";
 import { StorageKeyEnum } from "@/enums";
 import { UserMenuModel } from "@/model/settings";
-import { SysMenuService } from "@/service";
 import { logger, storage } from "@/utils";
-import { allPagesMap } from "@/utils/common";
+import { pagesMap } from "@/utils/common";
 import { makeAutoObservable } from "mobx";
 import React from "react";
 import { RouteObject } from "react-router-dom";
@@ -31,7 +31,7 @@ export class UserStore {
    */
   public async updateUserMenu(): Promise<UserMenuModel[]> {
     try {
-      const list = await SysMenuService.getUserMenu();
+      const list = await SysMenuAPI.getUserMenu();
       this.setUserMenu(list);
       return list;
     } catch (error) {
@@ -81,7 +81,7 @@ export class UserStore {
   private getRouteObjectList(menu: UserMenuModel[]): RouteObject[] {
     return menu.map(item => {
       let element: React.ReactNode;
-      const component = item.component ? allPagesMap.get(item.component) : undefined;
+      const component = item.component ? pagesMap.get(item.component) : undefined;
       if (component) {
         element = React.createElement(
           React.Suspense,

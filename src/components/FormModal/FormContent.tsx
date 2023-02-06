@@ -1,26 +1,47 @@
-import { isArray } from "@sentimental/toolkit";
-import { Button, Col, Form, Row } from "antd";
-import React, { forwardRef, memo, useEffect, useImperativeHandle, useMemo } from "react";
-import styled from "styled-components";
 import type { FormContentProps, FormContentRef } from "./lib/types";
 
-const FormContent = forwardRef<FormContentRef, FormContentProps>((props, ref) => {
-  const { options = [], initialValues, onSubmit, children, loading, double = false } = props;
+import { tips } from "@/utils";
+import { isArray, isPromise } from "@sentimental/toolkit";
+import { useMemoizedFn } from "ahooks";
+import { Button, Col, Form, Row } from "antd";
+import React, { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import styled from "styled-components";
 
+interface ContentProps extends FormContentProps {
+  label: string;
+}
+
+const FormContent = forwardRef<FormContentRef, ContentProps>((props, ref) => {
+  const { options = [], initialValues, onSubmit, children, loading, doubleColumn = false, label } = props;
   const [formInstance] = Form.useForm();
-
   useImperativeHandle(ref, () => ({ formInstance }));
+
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
     formInstance.setFieldsValue(initialValues);
   }, [initialValues]);
+
+  const submit = useMemoizedFn((v: any) => {
+    if (!onSubmit) return;
+    const result = onSubmit(initialValues ? Object.assign({}, initialValues, v) : v, label);
+    if (isPromise(result)) {
+      setSubmitLoading(true);
+      result
+        .then(() => tips.success(label + "成功"))
+        .catch(error => {
+          tips.error(error?.message || label + "失败");
+        })
+        .finally(() => setSubmitLoading(false));
+    }
+  });
 
   const finalChildren = useMemo(() => {
     if (isArray<React.ReactNode[]>(children)) {
       return (
         <Row gutter={12}>
           {children.map((child, index) => (
-            <Col key={index} span={double ? 12 : 24}>
+            <Col key={index} span={doubleColumn ? 12 : 24}>
               {child}
             </Col>
           ))}
@@ -31,7 +52,7 @@ const FormContent = forwardRef<FormContentRef, FormContentProps>((props, ref) =>
       return (
         <Row gutter={12}>
           {options.map((item, index) => (
-            <Col key={index} span={double ? 12 : 24}>
+            <Col key={index} span={doubleColumn ? 12 : 24}>
               <Form.Item key={index} {...item}></Form.Item>
             </Col>
           ))}
@@ -39,25 +60,14 @@ const FormContent = forwardRef<FormContentRef, FormContentProps>((props, ref) =>
       );
     }
     return children;
-  }, [children, options, double]);
+  }, [children, options, doubleColumn]);
 
   return (
     <Wrapper>
-      <Form
-        form={formInstance}
-        labelAlign="right"
-        labelCol={{ span: double ? 7 : 5 }}
-        onFinish={v => {
-          if (onSubmit) {
-            if (initialValues) {
-              onSubmit(Object.assign({}, initialValues, v));
-            } else onSubmit(v);
-          }
-        }}
-      >
+      <Form form={formInstance} labelAlign="right" labelCol={{ span: doubleColumn ? 7 : 5 }} onFinish={submit}>
         {finalChildren}
 
-        <Button block type="primary" size="large" htmlType="submit" loading={loading}>
+        <Button block type="primary" size="large" htmlType="submit" loading={submitLoading || loading}>
           提交
         </Button>
       </Form>

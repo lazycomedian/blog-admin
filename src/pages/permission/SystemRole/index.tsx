@@ -1,3 +1,4 @@
+import { SysRoleAPI } from "@/api";
 import AddButton from "@/components/AddButton";
 import BasicSearch from "@/components/BasicSearch";
 import FormModal, { useFormModalRef } from "@/components/FormModal";
@@ -6,19 +7,15 @@ import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import { useTableRequest } from "@/hooks";
 import PageCard from "@/layouts/PageCard";
 import PageHeader from "@/layouts/PageHeader";
-import { SaveOrUpdateModel } from "@/model/common";
 import { SysRoleModel } from "@/model/settings";
-import { SysRoleService } from "@/service";
 import { tips } from "@/utils";
-import { getModalTypeLabel } from "@/utils/common";
 import { useMemoizedFn } from "ahooks";
 import { Form, Input, Table } from "antd";
-import React, { useState } from "react";
+import React from "react";
+import MenuTree from "./components/MenuTree";
 import { useColumns } from "./lib";
 
 const SystemRole: React.FC = () => {
-  const [submitLoading, setSubmitLoading] = useState(false);
-
   // 表单弹窗控制器
   const formModalRef = useFormModalRef<Partial<SysRoleModel>>({ status: CommonStatusEnum.AVAILABLE });
 
@@ -28,32 +25,14 @@ const SystemRole: React.FC = () => {
   });
 
   // 获取列表数据
-  const { run: getList, tableProps } = useTableRequest(SysRoleService.queryList, {
+  const { run: getList, tableProps } = useTableRequest(SysRoleAPI.queryList, {
     defaultPageSize: 15,
     defaultCurrent: 1,
     onError: error => tips.error(error.message)
   });
 
-  /**
-   * 添加/编辑保存
-   * @param result 表单内容
-   */
-  const submit = useMemoizedFn(async (result: SaveOrUpdateModel<SysRoleModel>) => {
-    setSubmitLoading(true);
-    const modalType = formModalRef.getModalType();
-    const prefixTips = getModalTypeLabel(modalType);
-    if (modalType === ModalTypeEnum.EDIT) result.id = formModalRef.currentRecord?.id;
-
-    try {
-      await SysRoleService.saveOrUpdate(result);
-      tips.success(prefixTips + "成功");
-      getList();
-      formModalRef.close();
-    } catch (error: any) {
-      tips.error(error?.message);
-    } finally {
-      setSubmitLoading(false);
-    }
+  const submit = useMemoizedFn(async (result: SysRoleModel) => {
+    return console.log(result);
   });
 
   return (
@@ -67,17 +46,14 @@ const SystemRole: React.FC = () => {
       </PageCard>
 
       {/* modal */}
-      <FormModal
-        ref={formModalRef}
-        title="角色"
-        loading={submitLoading}
-        initialValues={formModalRef.currentRecord}
-        onSubmit={submit}
-      >
+      <FormModal ref={formModalRef} title="角色" initialValues={formModalRef.record} onSubmit={submit}>
         <Form.Item label="角色名称" name="roleName" rules={[{ required: true, message: "请输入角色名称" }]}>
           <Input placeholder="请输入角色名称" />
         </Form.Item>
         <StatusFormItem />
+        <Form.Item label="菜单权限" rules={[{ required: true, message: "请选择菜单权限" }]}>
+          <MenuTree />
+        </Form.Item>
       </FormModal>
     </React.Fragment>
   );

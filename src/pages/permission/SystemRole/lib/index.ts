@@ -1,8 +1,8 @@
 import type { SysRoleModel } from "@/model/settings";
 import type { UseColumns } from "@/typings/common";
 
+import { SysRoleAPI } from "@/api";
 import { useTableColumns } from "@/hooks";
-import { SysRoleService } from "@/service";
 import { tips } from "@/utils";
 import { getOperationRender, getStatusRender, timeRender } from "@/utils/render";
 import { useMemoizedFn } from "ahooks";
@@ -14,7 +14,7 @@ export const useColumns: UseColumns<SysRoleModel> = ({ reload, onEdit }) => {
    */
   const remove = useMemoizedFn(async (id: number) => {
     try {
-      await SysRoleService.remove(id);
+      await SysRoleAPI.remove(id);
       tips.success("删除成功");
       reload();
     } catch (error: any) {
@@ -25,8 +25,8 @@ export const useColumns: UseColumns<SysRoleModel> = ({ reload, onEdit }) => {
   return useTableColumns([
     { title: "ID", key: "id" },
     { title: "角色名", key: "roleName" },
-    { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysRoleService.switch }) },
     { title: "权限", key: "permission" },
+    { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysRoleAPI.switch }) },
     { title: "创建时间", key: "createTime", render: timeRender },
     {
       title: "操作",

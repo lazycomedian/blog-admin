@@ -1,8 +1,6 @@
 import React from "react";
 
-interface SystemConfigProps {}
-
-const SystemConfig: React.FC<SystemConfigProps> = props => {
+const SystemConfig: React.FC = () => {
   return <div>SystemConfig</div>;
 };
 

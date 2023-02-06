@@ -1,57 +1,44 @@
+import { SysAdminAPI, SysRoleAPI } from "@/api";
 import AddButton from "@/components/AddButton";
 import BasicSearch from "@/components/BasicSearch";
 import FormModal, { useFormModalRef } from "@/components/FormModal";
 import StatusFormItem from "@/components/StatusFormItem";
+import { SUPER_ADMIN_ID } from "@/constants";
 import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import { useTableRequest } from "@/hooks";
 import PageCard from "@/layouts/PageCard";
 import PageHeader from "@/layouts/PageHeader";
-import { SaveOrUpdateModel } from "@/model/common";
 import { SysAdminModel } from "@/model/settings";
-import { SysAdminService } from "@/service";
 import { tips } from "@/utils";
-import { getModalTypeLabel } from "@/utils/common";
-import { useMemoizedFn } from "ahooks";
+import { useMemoizedFn, useRequest } from "ahooks";
 import { Form, Input, Select, Table } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { useColumns } from "./lib";
 
 const SystemAdmin: React.FC = () => {
-  const [submitLoading, setSubmitLoading] = useState(false);
-
   // 表单弹窗控制器
   const formModalRef = useFormModalRef<Partial<SysAdminModel>>({ status: CommonStatusEnum.AVAILABLE });
 
   const columns = useColumns({
     reload: () => getList(),
-    onEdit: (v, r) => formModalRef.show(ModalTypeEnum.EDIT, r)
+    onEdit: (v, record) => {
+      record.roleIds = record.roleList.map(item => item.id);
+      formModalRef.show(ModalTypeEnum.EDIT, record);
+    }
   });
 
   // 获取列表数据
-  const { run: getList, tableProps } = useTableRequest(SysAdminService.queryList, {
+  const { run: getList, tableProps } = useTableRequest(SysAdminAPI.queryList, {
     onError: error => tips.error(error.message)
   });
 
-  /**
-   * 添加/编辑保存
-   * @param record
-   */
-  const submit = useMemoizedFn(async (result: SaveOrUpdateModel<SysAdminModel>) => {
-    setSubmitLoading(true);
-    const modalType = formModalRef.getModalType();
-    const prefixTips = getModalTypeLabel(modalType);
-    if (modalType === ModalTypeEnum.EDIT) result.id = formModalRef.currentRecord?.id;
+  // 获取角色列表
+  const { data: roleList = [] } = useRequest(SysRoleAPI.list);
 
-    try {
-      await SysAdminService.saveOrUpdate(result);
-      tips.success(prefixTips + "成功");
-      getList();
-      formModalRef.close();
-    } catch (error) {
-      tips.error(prefixTips + "失败");
-    } finally {
-      setSubmitLoading(false);
-    }
+  const submit = useMemoizedFn(async (result: SysAdminModel) => {
+    await SysAdminAPI.saveOrUpdate(result);
+    getList();
+    formModalRef.close();
   });
 
   return (
@@ -65,14 +52,7 @@ const SystemAdmin: React.FC = () => {
       </PageCard>
 
       {/* modal */}
-      <FormModal
-        ref={formModalRef}
-        title="管理员"
-        loading={submitLoading}
-        double
-        initialValues={formModalRef.currentRecord}
-        onSubmit={submit}
-      >
+      <FormModal ref={formModalRef} title="管理员" doubleColumn initialValues={formModalRef.record} onSubmit={submit}>
         <Form.Item label="管理员账号" name="username" rules={[{ required: true, message: "请输入管理员账号" }]}>
           <Input placeholder="请输入管理员账号" />
         </Form.Item>
@@ -82,13 +62,18 @@ const SystemAdmin: React.FC = () => {
         <Form.Item label="管理员密码" name="password" rules={[{ required: true, message: "请输入管理员密码" }]}>
           <Input.Password placeholder="请输入管理员密码" />
         </Form.Item>
-        <Form.Item label="管理员角色" name="role" rules={[{ required: true, message: "请选择管理员角色" }]}>
-          <Select placeholder="请选择管理员角色" />
+        <Form.Item label="管理员角色" name="roleIds" rules={[{ required: true, message: "请选择管理员角色" }]}>
+          <Select
+            placeholder="请选择管理员角色"
+            mode="multiple"
+            maxTagCount="responsive"
+            options={roleList.map(item => ({ label: item.roleName, value: item.id }))}
+          />
         </Form.Item>
         <Form.Item label="确认密码" name="confirmPassword" rules={[{ required: true, message: "请输入确认密码" }]}>
           <Input.Password placeholder="请再次输入密码" />
         </Form.Item>
-        <StatusFormItem />
+        <StatusFormItem disabled={SUPER_ADMIN_ID === formModalRef.record?.id} />
       </FormModal>
     </React.Fragment>
   );

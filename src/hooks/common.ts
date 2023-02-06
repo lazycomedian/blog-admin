@@ -26,14 +26,15 @@ export const useAppTitle = (title?: string) => {
 };
 
 /**
- * 获取当前路由
+ * 获取当前路由路径
  */
 export const usePathname = () => {
   const location = useLocation();
 
-  return useMemo(() => {
-    return location.pathname.includes("?") ? location.pathname.split("?")[0] : location.pathname;
-  }, [location.pathname]);
+  return useMemo(
+    () => (location.pathname.includes("?") ? location.pathname.split("?")[0] : location.pathname),
+    [location.pathname]
+  );
 };
 
 /**
@@ -41,8 +42,8 @@ export const usePathname = () => {
  */
 export const useRouteMenuObject = () => {
   const { userStore } = useStore();
-
   const pathname = usePathname();
+
   return useMemo(() => userStore.flattenUserMenu.find(item => item.path === pathname), [pathname]);
 };
 

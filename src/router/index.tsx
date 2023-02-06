@@ -1,7 +1,7 @@
 import { CommonRouteEnum } from "@/enums";
 import BasicLayout from "@/layouts";
 import NotFound from "@/layouts/ErrorPage/404";
-import Login from "@/pages/Login";
+import LoginPage from "@/layouts/LoginPage";
 import { useStore } from "@/store";
 import { useMemo } from "react";
 import { Navigate, RouteObject, useRoutes } from "react-router-dom";
@@ -11,7 +11,7 @@ export default function BasicRouter() {
 
   const routeConfig = useMemo<RouteObject[]>(() => {
     return [
-      { path: CommonRouteEnum.LOGIN, element: <Login /> },
+      { path: CommonRouteEnum.LOGIN, element: <LoginPage /> },
       {
         path: "/",
         element: <BasicLayout />,

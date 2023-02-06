@@ -6,7 +6,7 @@ import React from "react";
 import styled from "styled-components";
 import logo from "/octocat_white.svg";
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
   const [form] = Form.useForm<{ username: string; password: string }>();
 
   useAppTitle("登录");
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
 
 export const Wrapper = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,

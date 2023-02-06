@@ -6,24 +6,25 @@ import Iconfont from "@/components/Iconfont";
 import { iconfontTypes, TRUE } from "@/constants";
 import { CommonStatusEnum, ModalTypeEnum } from "@/enums";
 import * as antdIcons from "@ant-design/icons";
+import { matchBetween } from "@sentimental/toolkit";
 import React from "react";
 
 /**
  * 获取pages下的所有页面组件，默认使用路由懒加载
- * @returns {Map<string, React.FC | undefined>} 页面路由为key的组件集合
+ * @returns {Map<string, React.ComponentType | undefined>} 页面路由为key的组件集合
  */
-export function getAllPagesMap(): Map<string, React.FC | undefined> {
-  const files = import.meta.glob<boolean, string, { default: React.ComponentType }>("@/pages/**/index.tsx");
-  const pagesMap = new Map<string, React.FC | undefined>();
+export function getPagesMap(): Map<string, React.ComponentType | undefined> {
+  const files: Record<string, any> = import.meta.glob("@/pages/**/index.tsx");
+  const pagesMap = new Map<string, React.ComponentType | undefined>();
 
   for (const path in files) {
-    const key = path.replace(/^\/src\/pages/, "").replace(/\/index.tsx$/, "");
-    pagesMap.set(key, React.lazy(Reflect.get(files, path)));
+    const [key] = matchBetween(path, "/src/pages", "/index.tsx");
+    key && pagesMap.set(key, React.lazy(files[path]));
   }
   return pagesMap;
 }
 
-export const allPagesMap = getAllPagesMap();
+export const pagesMap = getPagesMap();
 
 /**
  * 根据icon图标名称获取图标节点

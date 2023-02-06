@@ -29,7 +29,7 @@ declare interface IResponse<Data = any> {
    */
   readonly code: number;
   /**
-   *  提示信息
+   * 提示信息
    */
   readonly message: string;
 }

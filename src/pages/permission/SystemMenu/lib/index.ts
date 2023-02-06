@@ -1,8 +1,8 @@
 import type { SysMenuModel } from "@/model/settings";
 import type { UseColumns } from "@/typings/common";
 
+import { SysMenuAPI } from "@/api";
 import { usePathname, useTableColumns } from "@/hooks";
-import { SysMenuService } from "@/service";
 import { tips } from "@/utils";
 import { getAntdIconNode } from "@/utils/common";
 import { getOperationRender, getStatusRender, timeRender, whetherRender } from "@/utils/render";
@@ -18,7 +18,7 @@ export const useColumns: UseColumns<SysMenuModel> = ({ reload, onEdit, onAdd }) 
    */
   const remove = useMemoizedFn(async (id: number) => {
     try {
-      await SysMenuService.remove(id);
+      await SysMenuAPI.remove(id);
       tips.success("删除成功");
       reload();
     } catch (error: any) {
@@ -36,7 +36,7 @@ export const useColumns: UseColumns<SysMenuModel> = ({ reload, onEdit, onAdd }) 
       key: "status",
       render: getStatusRender(record => ({
         onChange: reload,
-        service: SysMenuService.switch,
+        service: SysMenuAPI.switch,
         disabled: pathname === record.path
       }))
     },
