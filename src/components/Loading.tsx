@@ -1,4 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
+import { useUnmount } from "ahooks";
 import { Spin } from "antd";
 import { SpinIndicator } from "antd/es/spin";
 import React, { memo, useEffect, useRef, useState } from "react";
@@ -23,6 +24,8 @@ const Loading: React.FC<LoadingProps> = ({ tip, loadingDelay }) => {
       }, loadingDelay);
     }
   }, [loadingDelay]);
+
+  useUnmount(() => clearTimeout(timer.current));
 
   return (
     <Wrapper>

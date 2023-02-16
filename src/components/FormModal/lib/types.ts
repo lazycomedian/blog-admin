@@ -81,4 +81,4 @@ interface UseFormModalRefReturn<R> extends React.RefObject<FormModalRef>, Pick<U
  *
  * @param initialRecord 需要暂存记录值的初始值
  */
-export type UseFormModalRef = <R extends Partial<BaseModel>>(initialRecord?: R) => UseFormModalRefReturn<R>;
+export type UseFormModalRef = <R extends BaseModel>(initialRecord?: Partial<R>) => UseFormModalRefReturn<Partial<R>>;

@@ -1,4 +1,5 @@
-import { ConfigProvider, theme } from "antd";
+import Iconfont from "@/components/Iconfont";
+import { ConfigProvider, Modal, theme } from "antd";
 import { AliasToken, OverrideToken } from "antd/es/theme/interface";
 import zhCN from "antd/locale/zh_CN";
 import React from "react";
@@ -27,3 +28,8 @@ const AntdConfigProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
 };
 
 export default AntdConfigProvider;
+
+Modal.defaultProps = {
+  className: "i-ant-modal",
+  closeIcon: <Iconfont type="sentimental-close" style={{ fontSize: 18 }} />
+};

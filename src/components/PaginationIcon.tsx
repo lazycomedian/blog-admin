@@ -1,6 +1,6 @@
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import classNames from "classnames";
-import React, { memo } from "react";
+import React from "react";
 import styled from "styled-components";
 
 interface PaginationIconProps {
@@ -18,7 +18,7 @@ const PaginationIcon: React.FC<PaginationIconProps> = ({ isPrev, disabled }) => 
   );
 };
 
-export default memo(PaginationIcon);
+export default PaginationIcon;
 
 const Wrapper = styled.div`
   .ml4 {

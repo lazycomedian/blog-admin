@@ -7,6 +7,14 @@ export interface SysRoleModel extends BaseModel {
    * 角色名
    */
   roleName: string;
+  /**
+   * 关联的菜单列表
+   */
+  menuList: { id: number; menuName: string }[];
+  /**
+   * 关联的菜单ids
+   */
+  menuIds?: number[];
 }
 
 // <---------------------- 管理员管理模型 ----------------------> //
@@ -25,7 +33,7 @@ export interface SysAdminModel extends BaseModel {
    */
   roleList: { id: number; roleName: string }[];
   /**
-   * 关联的角色id集合
+   * 关联的角色ids
    */
   roleIds?: number[];
 }
@@ -72,7 +80,7 @@ export interface SysMenuModel extends BaseModel {
 
 export interface UserMenuModel
   extends BaseModel,
-    Pick<SysMenuModel, "name" | "path" | "component" | "icon" | "prefixPath" | "visible"> {
+    Pick<SysMenuModel, "name" | "path" | "component" | "icon" | "prefixPath" | "visible" | "pid"> {
   /**
    * 用户子菜单列表
    */

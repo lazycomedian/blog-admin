@@ -16,8 +16,9 @@ import React from "react";
 import { useColumns } from "./lib";
 
 const SystemAdmin: React.FC = () => {
-  // 表单弹窗控制器
-  const formModalRef = useFormModalRef<Partial<SysAdminModel>>({ status: CommonStatusEnum.AVAILABLE });
+  const formModalRef = useFormModalRef<SysAdminModel>({
+    status: CommonStatusEnum.AVAILABLE
+  });
 
   const columns = useColumns({
     reload: () => getList(),
@@ -27,7 +28,6 @@ const SystemAdmin: React.FC = () => {
     }
   });
 
-  // 获取列表数据
   const { run: getList, tableProps } = useTableRequest(SysAdminAPI.queryList, {
     onError: error => tips.error(error.message)
   });

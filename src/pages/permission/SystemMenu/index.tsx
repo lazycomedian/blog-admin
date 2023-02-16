@@ -25,15 +25,15 @@ const SystemMenu: React.FC = () => {
   const { userStore } = useStore();
   const pathname = usePathname();
 
-  // 表单弹窗控制器
-  const formModalRef = useFormModalRef<Partial<SysMenuModel>>({ status: CommonStatusEnum.AVAILABLE, visible: TRUE });
+  const formModalRef = useFormModalRef<SysMenuModel>({
+    status: CommonStatusEnum.AVAILABLE,
+    visible: TRUE
+  });
 
-  // 图标选择控制器
   const iconPickerRef = useModalRef();
 
   const [currentIconName, setCurrentIconName] = useState<string>();
 
-  // 获取列表数据
   const { run, loading, data = [] } = useRequest(SysMenuAPI.list, { onError: ({ message }) => tips.error(message) });
 
   const columns = useColumns({
@@ -42,10 +42,8 @@ const SystemMenu: React.FC = () => {
       userStore.updateUserMenu();
     },
     onEdit: (v, record) => {
-      formModalRef.show(ModalTypeEnum.EDIT, {
-        ...record,
-        path: record.path.replace(record.prefixPath || "", "")
-      });
+      record.path = record.path.replace(record.prefixPath || "", "");
+      formModalRef.show(ModalTypeEnum.EDIT, record);
     },
     onAdd: (v, record) => {
       formModalRef.show(ModalTypeEnum.ADD, {
@@ -72,7 +70,7 @@ const SystemMenu: React.FC = () => {
   });
 
   useEffect(() => {
-    setCurrentIconName(formModalRef.record?.icon);
+    if (formModalRef.record?.icon) setCurrentIconName(formModalRef.record.icon);
   }, [formModalRef.record]);
 
   const sortLimitMax = useMemo(() => {

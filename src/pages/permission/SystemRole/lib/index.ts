@@ -22,10 +22,10 @@ export const useColumns: UseColumns<SysRoleModel> = ({ reload, onEdit }) => {
     }
   });
 
-  return useTableColumns([
+  return useTableColumns<SysRoleModel>([
     { title: "ID", key: "id" },
-    { title: "角色名", key: "roleName" },
-    { title: "权限", key: "permission" },
+    { title: "角色名称", key: "roleName" },
+    { title: "权限", render: (v, record) => record.menuList.map(item => item.menuName).join(",") },
     { title: "状态", key: "status", render: getStatusRender({ onChange: reload, service: SysRoleAPI.switch }) },
     { title: "创建时间", key: "createTime", render: timeRender },
     {

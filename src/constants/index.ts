@@ -6,6 +6,8 @@ export const EMPTY_PLACE_HOLDER = "";
 /** 时间格式化方式 */
 export const FORMAT = "YYYY-MM-DD HH:mm:ss";
 
+export const ISO_8601_FORMAT = "YYYY-MM-DDTHH:mm:ss";
+
 /** 是 */
 export const TRUE = 1;
 

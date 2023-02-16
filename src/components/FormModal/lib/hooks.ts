@@ -14,7 +14,7 @@ export const useFormModalRef: UseFormModalRef = initialRecord => {
 
   const ref = useRef<FormModalRef>(null);
 
-  const show = useMemoizedFn<ReturnType<UseFormModalRef>["show"]>((modalType = ModalTypeEnum.ADD, record: AnyObject) => {
+  const show = useMemoizedFn<ReturnType<UseFormModalRef>["show"]>((modalType = ModalTypeEnum.ADD, record) => {
     setRecord(Object.assign({}, initialRecord, record));
     ref.current?.show(modalType);
   });

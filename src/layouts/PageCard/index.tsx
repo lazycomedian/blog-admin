@@ -1,5 +1,5 @@
 import { Card, Space } from "antd";
-import React, { memo } from "react";
+import React from "react";
 import styled from "styled-components";
 
 interface PageCardProps extends React.PropsWithChildren {}
@@ -16,7 +16,7 @@ const PageCard: React.FC<PageCardProps> = ({ children }) => {
   );
 };
 
-export default memo(PageCard);
+export default PageCard;
 
 const Wrapper = styled.div`
   margin-top: 16px;

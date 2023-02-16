@@ -132,3 +132,9 @@ export function getOpenKeysByPath(path: string | undefined): string[] {
     return prev;
   }, []);
 }
+
+/**
+ * 判断菜单数据是否是目录
+ * @param menuItem
+ */
+export const isCatalogue = (menuItem: UserMenuModel) => !menuItem.component;
